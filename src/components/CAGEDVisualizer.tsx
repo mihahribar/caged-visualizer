@@ -1,95 +1,49 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from 'react';
+import type { ChordType } from '../types';
+import {
+  CAGED_SHAPE_DATA,
+  CHROMATIC_VALUES,
+  FULL_CAGED_SEQUENCE,
+  NATURAL_STARTING_SHAPES,
+  STRING_NAMES,
+  TOTAL_FRETS
+} from '../constants';
 
 const CAGEDVisualizer = () => {
-  // CAGED shapes with their fret positions for different root chords
-  const cagedShapeData = {
-    C: {
-      name: 'C Shape',
-      color: '#FF6B6B',
-      // Fret positions for each string (high E to low E), 0 = open, -1 = not played
-      pattern: [0, 1, 0, 2, 3, -1],
-      fingers: [0, 1, 0, 2, 3, -1]
-    },
-    A: {
-      name: 'A Shape',
-      color: '#4ECDC4',
-      pattern: [0, 2, 2, 2, 0, -1],
-      fingers: [0, 4, 3, 2, 0, -1]
-    },
-    G: {
-      name: 'G Shape', 
-      color: '#45B7D1',
-      pattern: [3, 3, 0, 0, 2, 3],
-      fingers: [4, 4, 0, 0, 2, 3]
-    },
-    E: {
-      name: 'E Shape',
-      color: '#96CEB4',
-      pattern: [0, 0, 1, 2, 2, 0],
-      fingers: [0, 0, 1, 3, 2, 0]
-    },
-    D: {
-      name: 'D Shape',
-      color: '#FECA57',
-      pattern: [2, 3, 2, 0, -1, -1],
-      fingers: [2, 3, 1, 0, -1, -1]
-    }
-  };
-
-  const [selectedChord, setSelectedChord] = useState('C');
-  const [currentPosition, setCurrentPosition] = useState(0); // Index in CAGED sequence
+  const [selectedChord, setSelectedChord] = useState<ChordType>('C');
+  const [currentPosition, setCurrentPosition] = useState(0);
   const [showAllShapes, setShowAllShapes] = useState(false);
 
   // Get the CAGED sequence starting with the most natural shape for the selected chord
-  const getCagedSequence = (rootChord) => {
-    const fullSequence = ['C', 'A', 'G', 'E', 'D'];
-    
-    // For each chord, start with its most natural open shape
-    const naturalStartingShape = {
-      'C': 'C',
-      'A': 'A', 
-      'G': 'G',
-      'E': 'E',
-      'D': 'D'
-    };
-    
-    const startShape = naturalStartingShape[rootChord];
-    const startIndex = fullSequence.indexOf(startShape);
+  const getCagedSequence = (rootChord: ChordType) => {
+    const startShape = NATURAL_STARTING_SHAPES[rootChord];
+    const startIndex = FULL_CAGED_SEQUENCE.indexOf(startShape);
     
     // Rotate the sequence to start with the natural shape
-    return [...fullSequence.slice(startIndex), ...fullSequence.slice(0, startIndex)];
+    return [...FULL_CAGED_SEQUENCE.slice(startIndex), ...FULL_CAGED_SEQUENCE.slice(0, startIndex)];
   };
   
   // Calculate fret positions for each shape to play the selected chord
-  const getShapePositions = (rootChord) => {
-    // Chromatic values for each note
-    const chromaticValues = { C: 0, A: 9, G: 7, E: 4, D: 2 };
-    
-    // What note each CAGED shape naturally plays when open
-    const shapeRootNotes = { C: 0, A: 9, G: 7, E: 4, D: 2 }; // C, A, G, E, D
-    
-    const targetValue = chromaticValues[rootChord];
-    const positions = {};
+  const getShapePositions = (rootChord: ChordType) => {
+    const targetValue = CHROMATIC_VALUES[rootChord];
+    const positions: { [key: string]: number } = {};
     
     // Calculate where each shape needs to be placed
-    for (const [shapeKey, shapeRoot] of Object.entries(shapeRootNotes)) {
+    for (const [shapeKey, shapeRoot] of Object.entries(CHROMATIC_VALUES)) {
       positions[shapeKey] = (targetValue - shapeRoot + 12) % 12;
     }
     
     return positions;
   };
 
-  const cagedSequence = getCagedSequence(selectedChord);
-
-  const stringNames = ['E', 'B', 'G', 'D', 'A', 'E']; // High E to Low E (top to bottom on screen)
-  const totalFrets = 15;
-  
+  // Memoize expensive calculations
+  const cagedSequence = useMemo(() => getCagedSequence(selectedChord), [selectedChord]);
+  const shapePositions = useMemo(() => getShapePositions(selectedChord), [selectedChord]);
   const currentShape = cagedSequence[currentPosition];
-  const shapePositions = getShapePositions(selectedChord);
 
   // Get the fret number for a string in the current shape
-  const getShapeFret = (shapeKey, stringIndex, basePosition) => {
-    const shape = cagedShapeData[shapeKey];
+  const getShapeFret = (shapeKey: string, stringIndex: number, basePosition: number) => {
+    const shape = CAGED_SHAPE_DATA[shapeKey];
     const patternFret = shape.pattern[stringIndex];
     
     if (patternFret === -1) return -1; // Not played
@@ -100,8 +54,8 @@ const CAGEDVisualizer = () => {
   };
 
   // Get all shapes that have a dot at this position
-  const getShapesAtPosition = (stringIndex, fretNumber) => {
-    const shapesHere = [];
+  const getShapesAtPosition = (stringIndex: number, fretNumber: number) => {
+    const shapesHere: string[] = [];
     for (const shapeKey of cagedSequence) {
       const basePosition = shapePositions[shapeKey];
       const shapeFret = getShapeFret(shapeKey, stringIndex, basePosition);
@@ -113,18 +67,18 @@ const CAGEDVisualizer = () => {
   };
 
   // Create a gradient background for overlapping dots
-  const createGradientStyle = (shapes) => {
+  const createGradientStyle = (shapes: string[]) => {
     if (shapes.length === 1) {
-      return { backgroundColor: cagedShapeData[shapes[0]].color };
+      return { backgroundColor: CAGED_SHAPE_DATA[shapes[0]].color };
     } else if (shapes.length === 2) {
-      const color1 = cagedShapeData[shapes[0]].color;
-      const color2 = cagedShapeData[shapes[1]].color;
+      const color1 = CAGED_SHAPE_DATA[shapes[0]].color;
+      const color2 = CAGED_SHAPE_DATA[shapes[1]].color;
       return {
         background: `linear-gradient(90deg, ${color1} 50%, ${color2} 50%)`
       };
     } else if (shapes.length > 2) {
       // For 3+ overlaps, create a more complex vertical gradient
-      const colors = shapes.map(shape => cagedShapeData[shape].color);
+      const colors = shapes.map(shape => CAGED_SHAPE_DATA[shape].color);
       const gradientStops = colors.map((color, i) => 
         `${color} ${(i * 100 / colors.length)}%, ${color} ${((i + 1) * 100 / colors.length)}%`
       ).join(', ');
@@ -135,7 +89,7 @@ const CAGEDVisualizer = () => {
   };
 
   // Check if a dot should be shown at this position
-  const shouldShowDot = (stringIndex, fretNumber) => {
+  const shouldShowDot = (stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       return getShapesAtPosition(stringIndex, fretNumber).length > 0;
     } else {
@@ -147,17 +101,17 @@ const CAGEDVisualizer = () => {
   };
 
   // Get color/style for a dot at this position
-  const getDotStyle = (stringIndex, fretNumber) => {
+  const getDotStyle = (stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
       return createGradientStyle(shapesHere);
     } else {
-      return { backgroundColor: cagedShapeData[currentShape].color };
+      return { backgroundColor: CAGED_SHAPE_DATA[currentShape].color };
     }
   };
 
   // Check if this is a root note (simplified - usually on low E string)
-  const isRootNote = (stringIndex, fretNumber) => {
+  const isRootNote = (stringIndex: number, fretNumber: number) => {
     // Don't show root indicators when showing all shapes - too cluttered
     if (showAllShapes) return false;
     return stringIndex === 5 && shouldShowDot(stringIndex, fretNumber); // Low E is now at index 5
@@ -186,7 +140,7 @@ const CAGEDVisualizer = () => {
           <select 
             value={selectedChord}
             onChange={(e) => {
-              setSelectedChord(e.target.value);
+              setSelectedChord(e.target.value as ChordType);
               setCurrentPosition(0); // Reset to first position when changing chord
             }}
             className="px-4 py-2 border border-gray-300 rounded-lg text-gray-800"
@@ -213,9 +167,9 @@ const CAGEDVisualizer = () => {
             
             <div 
               className="px-6 py-3 rounded-full text-white font-medium text-lg"
-              style={{ backgroundColor: cagedShapeData[currentShape].color }}
+              style={{ backgroundColor: CAGED_SHAPE_DATA[currentShape].color }}
             >
-              {selectedChord} - {cagedShapeData[currentShape].name}
+              {selectedChord} - {CAGED_SHAPE_DATA[currentShape].name}
             </div>
             
             <button
@@ -235,7 +189,7 @@ const CAGEDVisualizer = () => {
                 className={`w-8 h-8 rounded-full text-white text-sm font-medium transition-all ${
                   index === currentPosition ? 'scale-110 shadow-lg' : 'opacity-40'
                 }`}
-                style={{ backgroundColor: cagedShapeData[shape].color }}
+                style={{ backgroundColor: CAGED_SHAPE_DATA[shape].color }}
               >
                 {shape}
               </button>
@@ -264,7 +218,7 @@ const CAGEDVisualizer = () => {
           {/* Fret markers */}
           <div className="flex justify-between mb-2">
             <div className="w-8"></div>
-            {Array.from({ length: totalFrets }, (_, i) => (
+            {Array.from({ length: TOTAL_FRETS }, (_, i) => (
               <div key={i} className="flex-1 text-center">
                 {[3, 5, 7, 9, 12].includes(i + 1) && (
                   <div className="text-xs text-gray-400 font-mono">{i + 1}</div>
@@ -274,7 +228,7 @@ const CAGEDVisualizer = () => {
           </div>
 
           {/* Strings and frets */}
-          {stringNames.map((stringName, stringIndex) => (
+          {STRING_NAMES.map((stringName, stringIndex) => (
             <div key={stringIndex} className="flex items-center mb-3">
               {/* String name */}
               <div className="w-8 text-right pr-2 text-sm font-mono text-gray-600">
@@ -289,7 +243,7 @@ const CAGEDVisualizer = () => {
                   style={{ zIndex: 1 }}
                 ></div>
                 
-                {Array.from({ length: totalFrets }, (_, fretIndex) => (
+                {Array.from({ length: TOTAL_FRETS }, (_, fretIndex) => (
                   <div key={fretIndex} className="flex-1 relative flex justify-center items-center h-8">
                     {/* Fret line */}
                     {fretIndex > 0 && (

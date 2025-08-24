@@ -1,11 +1,7 @@
-import CAGEDVisualizer from "./components/CAGEDVisualizer.tsx";
+import CAGEDVisualizer from "./components/CAGEDVisualizer";
 
 function App() {
-  return (
-    <>
-        <CAGEDVisualizer />
-    </>
-  )
+  return <CAGEDVisualizer />;
 }
 
 export default App
