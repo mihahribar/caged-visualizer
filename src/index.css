@@ -8,3 +8,33 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Fretboard Grid Layout */
+.fretboard-grid {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.fretboard-grid th,
+.fretboard-grid td {
+  position: relative;
+}
+
+.fretboard-grid th:first-child,
+.fretboard-grid td:first-child {
+  width: 2rem;
+}
+
+.fretboard-grid th:not(:first-child),
+.fretboard-grid td:not(:first-child) {
+  width: calc((100% - 2rem) / 15);
+}
+
+.string-row {
+  margin-bottom: 0.75rem;
+}
+
+.fret-cell {
+  height: 2rem;
+}

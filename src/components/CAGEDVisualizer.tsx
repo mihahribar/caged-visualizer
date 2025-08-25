@@ -5,10 +5,9 @@ import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import ChordSelector from './ChordSelector';
 import NavigationControls from './NavigationControls';
 import ShowAllToggle from './ShowAllToggle';
+import FretboardDisplay from './FretboardDisplay';
 import {
-  CAGED_SHAPE_DATA,
-  STRING_NAMES,
-  TOTAL_FRETS
+  CAGED_SHAPE_DATA
 } from '../constants';
 
 const CAGEDVisualizer = () => {
@@ -91,73 +90,24 @@ const CAGEDVisualizer = () => {
         onToggle={() => setShowAllShapes(!showAllShapes)}
       />
 
-      {/* Fretboard */}
-      <div className="bg-amber-50 p-6 rounded-lg shadow-sm">
-        <div className="relative">
-          {/* Fret markers */}
-          <div className="flex justify-between mb-2">
-            <div className="w-8"></div>
-            {Array.from({ length: TOTAL_FRETS }, (_, i) => (
-              <div key={i} className="flex-1 text-center">
-                {[3, 5, 7, 9, 12].includes(i + 1) && (
-                  <div className="text-xs text-gray-400 font-mono">{i + 1}</div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Strings and frets */}
-          {STRING_NAMES.map((stringName, stringIndex) => (
-            <div key={stringIndex} className="flex items-center mb-3">
-              {/* String name */}
-              <div className="w-8 text-right pr-2 text-sm font-mono text-gray-600">
-                {stringName}
-              </div>
-              
-              {/* Frets */}
-              <div className="flex-1 flex relative">
-                {/* String line */}
-                <div 
-                  className="absolute top-1/2 left-0 right-0 transform -translate-y-1/2 border-t border-gray-400"
-                  style={{ zIndex: 1 }}
-                ></div>
-                
-                {Array.from({ length: TOTAL_FRETS }, (_, fretIndex) => (
-                  <div key={fretIndex} className="flex-1 relative flex justify-center items-center h-8">
-                    {/* Fret line */}
-                    {fretIndex > 0 && (
-                      <div className="absolute left-0 top-0 bottom-0 border-l border-gray-300"></div>
-                    )}
-                    
-                    
-                    {/* Chord dot */}
-                    {shouldShowDot(stringIndex, fretIndex + 1) && (
-                      <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium shadow-sm ${
-                          isRootNote(stringIndex, fretIndex + 1) ? 'ring-2 ring-gray-800' : ''
-                        }`}
-                        style={{ 
-                          ...getDotStyle(stringIndex, fretIndex + 1),
-                          zIndex: 10 
-                        }}
-                      >
-                        {isRootNote(stringIndex, fretIndex + 1) ? 'R' : ''}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-
-        </div>
-      </div>
+      <FretboardDisplay
+        selectedChord={selectedChord}
+        currentShape={currentShape}
+        showAllShapes={showAllShapes}
+        shouldShowDot={shouldShowDot}
+        getDotStyle={getDotStyle}
+        isRootNote={isRootNote}
+      />
 
       {/* Instructions */}
-      <div className="mt-6 text-center text-sm text-gray-600 space-y-1">
+      <div className="mt-6 text-center text-sm text-gray-600 space-y-1" role="region" aria-label="Instructions">
         <p>Choose a CAGED chord, then cycle through the 5 shapes to see different ways to play it</p>
         <p>Each shape shows the same chord at a different position on the neck</p>
-        {showAllShapes && <p className="font-medium">Showing all 5 CAGED positions for {selectedChord} major - overlapping notes show blended colors</p>}
+        {showAllShapes && (
+          <p className="font-medium">
+            Showing all 5 CAGED positions for {selectedChord} major - overlapping notes show blended colors
+          </p>
+        )}
       </div>
     </div>
   );
