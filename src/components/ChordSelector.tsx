@@ -1,30 +1,49 @@
 import type { ChordType } from '../types';
+import { CAGED_SHAPE_DATA } from '../constants';
 
 interface ChordSelectorProps {
   selectedChord: ChordType;
   onChordChange: (chord: ChordType) => void;
 }
 
+const chords: { value: ChordType; label: string }[] = [
+  { value: 'C', label: 'C Major' },
+  { value: 'A', label: 'A Major' },
+  { value: 'G', label: 'G Major' },
+  { value: 'E', label: 'E Major' },
+  { value: 'D', label: 'D Major' }
+];
+
 export default function ChordSelector({ selectedChord, onChordChange }: ChordSelectorProps) {
   return (
-    <section className="text-center mb-6" aria-label="Chord selection">
-      <div className="mb-4">
-        <label htmlFor="chord-selector" className="text-gray-600 text-sm mr-3">
+    <section className="text-center mb-8" aria-label="Chord selection">
+      <div className="mb-6">
+        <label className="block text-gray-600 text-sm mb-4">
           Choose your chord:
         </label>
-        <select 
-          id="chord-selector"
-          value={selectedChord}
-          onChange={(e) => onChordChange(e.target.value as ChordType)}
-          className="px-4 py-2 border border-gray-300 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          aria-label="Select chord type"
-        >
-          <option value="C">C Major</option>
-          <option value="A">A Major</option>
-          <option value="G">G Major</option>
-          <option value="E">E Major</option>
-          <option value="D">D Major</option>
-        </select>
+        <div className="flex justify-center gap-2 flex-wrap">
+          {chords.map(({ value, label }) => (
+            <button
+              key={value}
+              onClick={() => onChordChange(value)}
+              className={`
+                px-6 py-3 rounded-lg font-medium text-sm text-white transition-all duration-200
+                min-w-[100px] focus:ring-2 focus:ring-offset-2 focus:outline-none
+                ${selectedChord === value
+                  ? 'shadow-lg transform scale-105 focus:ring-white'
+                  : 'opacity-40 hover:opacity-60 focus:ring-gray-400'
+                }
+              `}
+              style={{
+                backgroundColor: CAGED_SHAPE_DATA[value].color
+              }}
+              aria-label={`Select ${label}`}
+              aria-pressed={selectedChord === value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );
