@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import type { ChordType } from '../types';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
+import { useCAGEDState } from '../hooks/useCAGEDState';
 import ChordSelector from './ChordSelector';
 import NavigationControls from './NavigationControls';
 import ShowAllToggle from './ShowAllToggle';
@@ -11,9 +10,8 @@ import {
 } from '../constants';
 
 const CAGEDVisualizer = () => {
-  const [selectedChord, setSelectedChord] = useState<ChordType>('C');
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const [showAllShapes, setShowAllShapes] = useState(false);
+  const { state, actions } = useCAGEDState();
+  const { selectedChord, currentPosition, showAllShapes } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
@@ -51,11 +49,11 @@ const CAGEDVisualizer = () => {
   };
 
   const nextPosition = () => {
-    setCurrentPosition((prev) => (prev + 1) % cagedSequence.length);
+    actions.nextPosition(cagedSequence.length);
   };
 
   const previousPosition = () => {
-    setCurrentPosition((prev) => (prev - 1 + cagedSequence.length) % cagedSequence.length);
+    actions.previousPosition(cagedSequence.length);
   };
 
   return (
@@ -68,10 +66,7 @@ const CAGEDVisualizer = () => {
 
       <ChordSelector
         selectedChord={selectedChord}
-        onChordChange={(chord) => {
-          setSelectedChord(chord);
-          setCurrentPosition(0); // Reset to first position when changing chord
-        }}
+        onChordChange={actions.setChord}
       />
 
       <NavigationControls
@@ -81,13 +76,13 @@ const CAGEDVisualizer = () => {
         cagedSequence={cagedSequence}
         onPreviousPosition={previousPosition}
         onNextPosition={nextPosition}
-        onSetPosition={setCurrentPosition}
+        onSetPosition={actions.setPosition}
         showAllShapes={showAllShapes}
       />
 
       <ShowAllToggle
         showAllShapes={showAllShapes}
-        onToggle={() => setShowAllShapes(!showAllShapes)}
+        onToggle={actions.toggleShowAllShapes}
       />
 
       <FretboardDisplay
