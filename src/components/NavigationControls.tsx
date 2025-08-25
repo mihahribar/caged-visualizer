@@ -63,7 +63,7 @@ export default function NavigationControls({
       <div className="flex justify-center items-center space-x-4 mb-4">
         <button
           onClick={onPreviousPosition}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 font-medium transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none"
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-700 dark:text-gray-200 font-medium transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none"
           aria-label="Previous chord shape"
           title="Previous shape (←)"
         >
@@ -82,7 +82,7 @@ export default function NavigationControls({
         
         <button
           onClick={onNextPosition}
-          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 font-medium transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none"
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-700 dark:text-gray-200 font-medium transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none"
           aria-label="Next chord shape"
           title="Next shape (→)"
         >
@@ -109,7 +109,7 @@ export default function NavigationControls({
         ))}
       </div>
       
-      <div className="mt-2 text-xs text-gray-500" aria-label="Keyboard shortcuts">
+      <div className="mt-2 text-xs text-gray-500 dark:text-gray-400" aria-label="Keyboard shortcuts">
         Use ←/→ or numbers 1-5 for quick navigation
       </div>
     </section>

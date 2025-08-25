@@ -1,7 +1,14 @@
 import CAGEDVisualizer from "./components/CAGEDVisualizer";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
-  return <CAGEDVisualizer />;
+  return (
+    <ThemeProvider>
+      <ThemeToggle />
+      <CAGEDVisualizer />
+    </ThemeProvider>
+  );
 }
 
 export default App

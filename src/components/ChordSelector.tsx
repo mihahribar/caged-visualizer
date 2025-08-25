@@ -18,7 +18,7 @@ export default function ChordSelector({ selectedChord, onChordChange }: ChordSel
   return (
     <section className="text-center mb-8" aria-label="Chord selection">
       <div className="mb-6">
-        <label className="block text-gray-600 text-sm mb-4">
+        <label className="block text-gray-600 dark:text-gray-300 text-sm mb-4">
           Choose your chord:
         </label>
         <div className="flex justify-center gap-2 flex-wrap">
@@ -28,7 +28,7 @@ export default function ChordSelector({ selectedChord, onChordChange }: ChordSel
               onClick={() => onChordChange(value)}
               className={`
                 px-6 py-3 rounded-lg font-medium text-sm text-white transition-all duration-200
-                min-w-[100px] focus:ring-2 focus:ring-offset-2 focus:outline-none
+                min-w-[100px] focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:outline-none
                 ${selectedChord === value
                   ? 'shadow-lg transform scale-105 focus:ring-white'
                   : 'opacity-40 hover:opacity-60 focus:ring-gray-400'
