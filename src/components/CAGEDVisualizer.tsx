@@ -3,6 +3,7 @@ import type { ChordType } from '../types';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import ChordSelector from './ChordSelector';
+import NavigationControls from './NavigationControls';
 import {
   CAGED_SHAPE_DATA,
   STRING_NAMES,
@@ -73,49 +74,16 @@ const CAGEDVisualizer = () => {
         }}
       />
 
-      {/* Current Shape Info & Navigation */}
-      {!showAllShapes && (
-        <div className="text-center mb-6">
-          <div className="flex justify-center items-center space-x-4 mb-4">
-            <button
-              onClick={previousPosition}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 font-medium transition-colors"
-            >
-              ← Previous
-            </button>
-            
-            <div 
-              className="px-6 py-3 rounded-full text-white font-medium text-lg"
-              style={{ backgroundColor: CAGED_SHAPE_DATA[currentShape].color }}
-            >
-              {selectedChord} - {CAGED_SHAPE_DATA[currentShape].name}
-            </div>
-            
-            <button
-              onClick={nextPosition}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-700 font-medium transition-colors"
-            >
-              Next →
-            </button>
-          </div>
-          
-          {/* CAGED Progress Indicator */}
-          <div className="flex justify-center space-x-2">
-            {cagedSequence.map((shape, index) => (
-              <button
-                key={shape}
-                onClick={() => setCurrentPosition(index)}
-                className={`w-8 h-8 rounded-full text-white text-sm font-medium transition-all ${
-                  index === currentPosition ? 'scale-110 shadow-lg' : 'opacity-40'
-                }`}
-                style={{ backgroundColor: CAGED_SHAPE_DATA[shape].color }}
-              >
-                {shape}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <NavigationControls
+        selectedChord={selectedChord}
+        currentPosition={currentPosition}
+        currentShape={currentShape}
+        cagedSequence={cagedSequence}
+        onPreviousPosition={previousPosition}
+        onNextPosition={nextPosition}
+        onSetPosition={setCurrentPosition}
+        showAllShapes={showAllShapes}
+      />
 
       {/* Show All Shapes Toggle */}
       <div className="flex justify-center mb-8">
