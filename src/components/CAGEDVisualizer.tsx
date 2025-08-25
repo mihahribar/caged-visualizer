@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ChordType } from '../types';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
+import ChordSelector from './ChordSelector';
 import {
   CAGED_SHAPE_DATA,
   STRING_NAMES,
@@ -64,26 +65,13 @@ const CAGEDVisualizer = () => {
         <p className="text-gray-600">Learn the same chord using different shapes down the neck</p>
       </div>
 
-      {/* Chord Selector */}
-      <div className="text-center mb-6">
-        <div className="mb-4">
-          <label className="text-gray-600 text-sm mr-3">Choose your chord:</label>
-          <select 
-            value={selectedChord}
-            onChange={(e) => {
-              setSelectedChord(e.target.value as ChordType);
-              setCurrentPosition(0); // Reset to first position when changing chord
-            }}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-800"
-          >
-            <option value="C">C Major</option>
-            <option value="A">A Major</option>
-            <option value="G">G Major</option>
-            <option value="E">E Major</option>
-            <option value="D">D Major</option>
-          </select>
-        </div>
-      </div>
+      <ChordSelector 
+        selectedChord={selectedChord}
+        onChordChange={(chord) => {
+          setSelectedChord(chord);
+          setCurrentPosition(0); // Reset to first position when changing chord
+        }}
+      />
 
       {/* Current Shape Info & Navigation */}
       {!showAllShapes && (
