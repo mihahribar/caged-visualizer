@@ -1,0 +1,66 @@
+import { useMemo } from 'react';
+import type { ChordType } from '../types';
+import { CHROMATIC_VALUES, CAGED_SHAPE_DATA } from '../constants';
+
+export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[]) {
+  const shapePositions = useMemo(() => {
+    const targetValue = CHROMATIC_VALUES[selectedChord];
+    const positions: { [key: string]: number } = {};
+    
+    for (const [shapeKey, shapeRoot] of Object.entries(CHROMATIC_VALUES)) {
+      positions[shapeKey] = (targetValue - shapeRoot + 12) % 12;
+    }
+    
+    return positions;
+  }, [selectedChord]);
+
+  const getShapeFret = (shapeKey: string, stringIndex: number, basePosition: number) => {
+    const shape = CAGED_SHAPE_DATA[shapeKey];
+    const patternFret = shape.pattern[stringIndex];
+    
+    if (patternFret === -1) return -1; // Not played
+    if (patternFret === 0 && basePosition === 0) return 0; // Open string
+    if (patternFret === 0 && basePosition > 0) return basePosition; // Barre
+    
+    return patternFret + basePosition;
+  };
+
+  const getShapesAtPosition = (stringIndex: number, fretNumber: number) => {
+    const shapesHere: string[] = [];
+    for (const shapeKey of cagedSequence) {
+      const basePosition = shapePositions[shapeKey];
+      const shapeFret = getShapeFret(shapeKey, stringIndex, basePosition);
+      if (shapeFret === fretNumber && shapeFret > 0) {
+        shapesHere.push(shapeKey);
+      }
+    }
+    return shapesHere;
+  };
+
+  const createGradientStyle = (shapes: string[]) => {
+    if (shapes.length === 1) {
+      return { backgroundColor: CAGED_SHAPE_DATA[shapes[0]].color };
+    } else if (shapes.length === 2) {
+      const color1 = CAGED_SHAPE_DATA[shapes[0]].color;
+      const color2 = CAGED_SHAPE_DATA[shapes[1]].color;
+      return {
+        background: `linear-gradient(90deg, ${color1} 50%, ${color2} 50%)`
+      };
+    } else if (shapes.length > 2) {
+      const colors = shapes.map(shape => CAGED_SHAPE_DATA[shape].color);
+      const gradientStops = colors.map((color, i) => 
+        `${color} ${(i * 100 / colors.length)}%, ${color} ${((i + 1) * 100 / colors.length)}%`
+      ).join(', ');
+      return {
+        background: `linear-gradient(90deg, ${gradientStops})`
+      };
+    }
+  };
+
+  return {
+    shapePositions,
+    getShapeFret,
+    getShapesAtPosition,
+    createGradientStyle,
+  };
+}

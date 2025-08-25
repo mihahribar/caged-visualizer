@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import type { ChordType } from '../types';
+import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
+import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import {
   CAGED_SHAPE_DATA,
-  CHROMATIC_VALUES,
-  FULL_CAGED_SEQUENCE,
-  NATURAL_STARTING_SHAPES,
   STRING_NAMES,
   TOTAL_FRETS
 } from '../constants';
@@ -14,79 +13,11 @@ const CAGEDVisualizer = () => {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [showAllShapes, setShowAllShapes] = useState(false);
 
-  // Get the CAGED sequence starting with the most natural shape for the selected chord
-  const getCagedSequence = (rootChord: ChordType) => {
-    const startShape = NATURAL_STARTING_SHAPES[rootChord];
-    const startIndex = FULL_CAGED_SEQUENCE.indexOf(startShape);
-    
-    // Rotate the sequence to start with the natural shape
-    return [...FULL_CAGED_SEQUENCE.slice(startIndex), ...FULL_CAGED_SEQUENCE.slice(0, startIndex)];
-  };
-  
-  // Calculate fret positions for each shape to play the selected chord
-  const getShapePositions = (rootChord: ChordType) => {
-    const targetValue = CHROMATIC_VALUES[rootChord];
-    const positions: { [key: string]: number } = {};
-    
-    // Calculate where each shape needs to be placed
-    for (const [shapeKey, shapeRoot] of Object.entries(CHROMATIC_VALUES)) {
-      positions[shapeKey] = (targetValue - shapeRoot + 12) % 12;
-    }
-    
-    return positions;
-  };
-
-  // Memoize expensive calculations
-  const cagedSequence = useMemo(() => getCagedSequence(selectedChord), [selectedChord]);
-  const shapePositions = useMemo(() => getShapePositions(selectedChord), [selectedChord]);
+  // Use custom hooks for logic
+  const cagedSequence = useCAGEDSequence(selectedChord);
+  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle } = useCAGEDLogic(selectedChord, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
-  // Get the fret number for a string in the current shape
-  const getShapeFret = (shapeKey: string, stringIndex: number, basePosition: number) => {
-    const shape = CAGED_SHAPE_DATA[shapeKey];
-    const patternFret = shape.pattern[stringIndex];
-    
-    if (patternFret === -1) return -1; // Not played
-    if (patternFret === 0 && basePosition === 0) return 0; // Open string
-    if (patternFret === 0 && basePosition > 0) return basePosition; // Barre
-    
-    return patternFret + basePosition;
-  };
-
-  // Get all shapes that have a dot at this position
-  const getShapesAtPosition = (stringIndex: number, fretNumber: number) => {
-    const shapesHere: string[] = [];
-    for (const shapeKey of cagedSequence) {
-      const basePosition = shapePositions[shapeKey];
-      const shapeFret = getShapeFret(shapeKey, stringIndex, basePosition);
-      if (shapeFret === fretNumber && shapeFret > 0) {
-        shapesHere.push(shapeKey);
-      }
-    }
-    return shapesHere;
-  };
-
-  // Create a gradient background for overlapping dots
-  const createGradientStyle = (shapes: string[]) => {
-    if (shapes.length === 1) {
-      return { backgroundColor: CAGED_SHAPE_DATA[shapes[0]].color };
-    } else if (shapes.length === 2) {
-      const color1 = CAGED_SHAPE_DATA[shapes[0]].color;
-      const color2 = CAGED_SHAPE_DATA[shapes[1]].color;
-      return {
-        background: `linear-gradient(90deg, ${color1} 50%, ${color2} 50%)`
-      };
-    } else if (shapes.length > 2) {
-      // For 3+ overlaps, create a more complex vertical gradient
-      const colors = shapes.map(shape => CAGED_SHAPE_DATA[shape].color);
-      const gradientStops = colors.map((color, i) => 
-        `${color} ${(i * 100 / colors.length)}%, ${color} ${((i + 1) * 100 / colors.length)}%`
-      ).join(', ');
-      return {
-        background: `linear-gradient(90deg, ${gradientStops})`
-      };
-    }
-  };
 
   // Check if a dot should be shown at this position
   const shouldShowDot = (stringIndex: number, fretNumber: number) => {
