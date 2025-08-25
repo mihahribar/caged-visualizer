@@ -4,6 +4,7 @@ import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import ChordSelector from './ChordSelector';
 import NavigationControls from './NavigationControls';
+import ShowAllToggle from './ShowAllToggle';
 import {
   CAGED_SHAPE_DATA,
   STRING_NAMES,
@@ -66,7 +67,7 @@ const CAGEDVisualizer = () => {
         <p className="text-gray-600">Learn the same chord using different shapes down the neck</p>
       </div>
 
-      <ChordSelector 
+      <ChordSelector
         selectedChord={selectedChord}
         onChordChange={(chord) => {
           setSelectedChord(chord);
@@ -85,19 +86,10 @@ const CAGEDVisualizer = () => {
         showAllShapes={showAllShapes}
       />
 
-      {/* Show All Shapes Toggle */}
-      <div className="flex justify-center mb-8">
-        <button
-          onClick={() => setShowAllShapes(!showAllShapes)}
-          className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
-            showAllShapes 
-              ? 'bg-gray-800 text-white' 
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          {showAllShapes ? 'Show Single Shape' : 'Show All CAGED Shapes'}
-        </button>
-      </div>
+      <ShowAllToggle
+        showAllShapes={showAllShapes}
+        onToggle={() => setShowAllShapes(!showAllShapes)}
+      />
 
       {/* Fretboard */}
       <div className="bg-amber-50 p-6 rounded-lg shadow-sm">
