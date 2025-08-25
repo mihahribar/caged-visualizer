@@ -22,6 +22,8 @@ src/
    main.tsx                   # React entry point
    index.css                  # Global styles with TailwindCSS
    vite-env.d.ts             # Vite environment types
+.github/workflows/
+   deploy.yml                 # GitHub Actions deployment workflow
 ```
 
 ## Key Features
@@ -37,6 +39,13 @@ src/
 - `npm run build` - Build for production (runs TypeScript check first)
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview production build
+
+## Deployment
+- **GitHub Actions**: Automated deployment to GitHub Pages via `.github/workflows/deploy.yml`
+- **Trigger**: Automatically deploys on push to main branch
+- **Process**: Builds project with `npm run build` and deploys `/dist` folder
+- **Custom Domain**: Configured for caged.hribar.org
+- **Setup**: Repository Settings → Pages → Source: "GitHub Actions"
 
 ## Development Notes
 - Main visualizer logic in `src/components/CAGEDVisualizer.tsx` (fully TypeScript, optimized with useMemo)
