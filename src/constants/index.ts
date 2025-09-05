@@ -9,31 +9,36 @@ export const CAGED_SHAPE_DATA: CAGEDShapeData = {
     name: 'C Shape',
     color: '#FF6B6B',
     pattern: [0, 1, 0, 2, 3, -1],
-    fingers: [0, 1, 0, 2, 3, -1]
+    fingers: [0, 1, 0, 2, 3, -1],
+    rootNotes: [4]
   },
   A: {
     name: 'A Shape',
     color: '#4ECDC4',
     pattern: [0, 2, 2, 2, 0, -1],
-    fingers: [0, 4, 3, 2, 0, -1]
+    fingers: [0, 4, 3, 2, 0, -1],
+    rootNotes: [4]
   },
   G: {
     name: 'G Shape', 
     color: '#45B7D1',
     pattern: [3, 0, 0, 0, 2, 3],
-    fingers: [4, -1, 0, 0, 2, 3]
+    fingers: [4, -1, 0, 0, 2, 3],
+    rootNotes: [0, 5]
   },
   E: {
     name: 'E Shape',
     color: '#96CEB4',
     pattern: [0, 0, 1, 2, 2, 0],
-    fingers: [0, 0, 1, 3, 2, 0]
+    fingers: [0, 0, 1, 3, 2, 0],
+    rootNotes: [0, 5]
   },
   D: {
     name: 'D Shape',
     color: '#FECA57',
     pattern: [2, 3, 2, 0, -1, -1],
-    fingers: [2, 3, 1, 0, -1, -1]
+    fingers: [2, 3, 1, 0, -1, -1],
+    rootNotes: [3]
   }
 };
 

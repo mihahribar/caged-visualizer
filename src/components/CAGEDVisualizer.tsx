@@ -41,11 +41,20 @@ const CAGEDVisualizer = () => {
     }
   };
 
-  // Check if this is a root note (simplified - usually on low E string)
+  // Check if this is a root note for the current shape
   const isRootNote = (stringIndex: number, fretNumber: number) => {
-    // Don't show root indicators when showing all shapes - too cluttered
-    if (showAllShapes) return false;
-    return stringIndex === 5 && shouldShowDot(stringIndex, fretNumber); // Low E is now at index 5
+    if (showAllShapes) {
+      // When showing all shapes, check if any shape has a root note at this position
+      const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
+      return shapesHere.some(shapeKey => {
+        const shape = CAGED_SHAPE_DATA[shapeKey];
+        return shape.rootNotes.includes(stringIndex);
+      });
+    } else {
+      // For single shape view, check if current shape has root note here
+      const shape = CAGED_SHAPE_DATA[currentShape];
+      return shape.rootNotes.includes(stringIndex) && shouldShowDot(stringIndex, fretNumber);
+    }
   };
 
   const nextPosition = () => {

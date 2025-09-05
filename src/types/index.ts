@@ -3,6 +3,7 @@ export interface CAGEDShape {
   color: string;
   pattern: number[];
   fingers: number[];
+  rootNotes: number[];
 }
 
 export interface CAGEDShapeData {
