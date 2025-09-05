@@ -18,3 +18,35 @@ export interface ChromaticValues {
 export interface ShapePositions {
   [key: string]: number;
 }
+
+export interface QuizQuestion {
+  id: number;
+  rootChord: ChordType;
+  shapeUsed: ChordType;
+  position: number;
+  choices: ChordType[];
+  correctAnswer: ChordType;
+}
+
+export interface QuizAnswer {
+  questionId: number;
+  selectedAnswer: ChordType;
+  isCorrect: boolean;
+  timeSpent?: number;
+}
+
+export interface QuizSession {
+  questions: QuizQuestion[];
+  answers: QuizAnswer[];
+  currentQuestionIndex: number;
+  score: number;
+  totalQuestions: number;
+  isActive: boolean;
+  isCompleted: boolean;
+}
+
+export interface QuizConfig {
+  questionCount: number;
+  allowedChords: ChordType[];
+  allowedShapes: ChordType[];
+}
