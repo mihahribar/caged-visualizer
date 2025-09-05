@@ -1,9 +1,11 @@
 import { useQuiz } from '../hooks/useQuiz';
+import { useNavigation } from '../hooks/useNavigation';
 import QuizQuestion from './QuizQuestion';
 import QuizResults from './QuizResults';
 import QuizProgress from './QuizProgress';
 
 export default function QuizPage() {
+  const { navigateTo } = useNavigation();
   const {
     isIdle,
     isActive,
@@ -16,13 +18,18 @@ export default function QuizPage() {
     getResults,
   } = useQuiz();
 
+  const handleBackToVisualizer = () => {
+    resetQuiz();
+    navigateTo('visualizer');
+  };
+
   if (isIdle) {
     return (
-      <div className="max-w-4xl mx-auto p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
+      <div className="max-w-4xl mx-auto p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-light text-gray-800 dark:text-gray-100 mb-2">
+          <h2 className="text-2xl font-light text-gray-800 dark:text-gray-100 mb-2">
             CAGED Quiz Mode
-          </h1>
+          </h2>
           <p className="text-gray-600 dark:text-gray-300 mb-8">
             Test your knowledge of chord identification using the CAGED system
           </p>
@@ -39,12 +46,20 @@ export default function QuizPage() {
             </ul>
           </div>
           
-          <button
-            onClick={startNewQuiz}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg"
-          >
-            Start Quiz
-          </button>
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={startNewQuiz}
+              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg"
+            >
+              Start Quiz
+            </button>
+            <button
+              onClick={handleBackToVisualizer}
+              className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 text-lg"
+            >
+              Back to Visualizer
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -52,7 +67,7 @@ export default function QuizPage() {
 
   if (isActive && currentQuestion) {
     return (
-      <div className="max-w-6xl mx-auto p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
+      <div className="max-w-6xl mx-auto p-8">
         <div className="mb-6">
           <QuizProgress progress={progress} />
         </div>
@@ -68,11 +83,11 @@ export default function QuizPage() {
   if (isCompleted) {
     const results = getResults();
     return (
-      <div className="max-w-4xl mx-auto p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
+      <div className="max-w-4xl mx-auto p-8">
         <QuizResults
           results={results}
           onStartNewQuiz={startNewQuiz}
-          onResetQuiz={resetQuiz}
+          onBackToVisualizer={handleBackToVisualizer}
         />
       </div>
     );

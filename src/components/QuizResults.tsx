@@ -9,10 +9,10 @@ interface QuizResultsProps {
     answers: QuizAnswer[];
   } | null;
   onStartNewQuiz: () => void;
-  onResetQuiz: () => void;
+  onBackToVisualizer: () => void;
 }
 
-export default function QuizResults({ results, onStartNewQuiz, onResetQuiz }: QuizResultsProps) {
+export default function QuizResults({ results, onStartNewQuiz, onBackToVisualizer }: QuizResultsProps) {
   if (!results) return null;
 
   const { totalQuestions, correctAnswers, percentage, answers } = results;
@@ -115,10 +115,10 @@ export default function QuizResults({ results, onStartNewQuiz, onResetQuiz }: Qu
           Take Another Quiz
         </button>
         <button
-          onClick={onResetQuiz}
+          onClick={onBackToVisualizer}
           className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
         >
-          Back to Main Menu
+          Back to Visualizer
         </button>
       </div>
 
