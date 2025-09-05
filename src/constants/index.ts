@@ -4,8 +4,6 @@ export const TOTAL_FRETS = 15;
 
 export const STRING_NAMES = ['E', 'B', 'G', 'D', 'A', 'E'] as const;
 
-export const FRET_MARKERS = [3, 5, 7, 9, 12] as const;
-
 export const CAGED_SHAPE_DATA: CAGEDShapeData = {
   C: {
     name: 'C Shape',
@@ -22,8 +20,8 @@ export const CAGED_SHAPE_DATA: CAGEDShapeData = {
   G: {
     name: 'G Shape', 
     color: '#45B7D1',
-    pattern: [3, 3, 0, 0, 2, 3],
-    fingers: [4, 4, 0, 0, 2, 3]
+    pattern: [3, 0, 0, 0, 2, 3],
+    fingers: [4, -1, 0, 0, 2, 3]
   },
   E: {
     name: 'E Shape',

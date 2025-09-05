@@ -57,10 +57,10 @@ const CAGEDVisualizer = () => {
   };
 
   return (
-    <div className="max-w-8xl mx-auto p-8 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
-      {/* Header */}
+    <div className="max-w-6xl mx-auto p-8">
+      {/* Page Description */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-light text-gray-800 dark:text-gray-100 mb-2">CAGED Guitar System</h1>
+        <h2 className="text-2xl font-light text-gray-800 dark:text-gray-100 mb-2">Interactive Visualizer</h2>
         <p className="text-gray-600 dark:text-gray-300">Learn the same chord using different shapes down the neck</p>
       </div>
 
