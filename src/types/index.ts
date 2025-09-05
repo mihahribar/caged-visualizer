@@ -31,6 +31,7 @@ export interface QuizQuestion {
 export interface QuizAnswer {
   questionId: number;
   selectedAnswer: ChordType;
+  correctAnswer: ChordType;
   isCorrect: boolean;
   timeSpent?: number;
 }

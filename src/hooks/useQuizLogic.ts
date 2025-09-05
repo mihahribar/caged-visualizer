@@ -11,9 +11,9 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-function generateWrongChoices(correctAnswer: ChordType, allChords: ChordType[]): ChordType[] {
-  const wrongChoices = allChords.filter(chord => chord !== correctAnswer);
-  return shuffleArray(wrongChoices).slice(0, 3); // Take 3 wrong choices
+function generateAllChoices(allChords: ChordType[]): ChordType[] {
+  // Return all available chords in random order
+  return shuffleArray([...allChords]);
 }
 
 export function useQuizLogic(config: QuizConfig) {
@@ -33,9 +33,8 @@ export function useQuizLogic(config: QuizConfig) {
         const shapeValue = CHROMATIC_VALUES[shapeUsed];
         const position = (targetValue - shapeValue + 12) % 12;
         
-        // Generate multiple choice options
-        const wrongChoices = generateWrongChoices(rootChord, config.allowedChords);
-        const allChoices = shuffleArray([rootChord, ...wrongChoices]);
+        // Generate multiple choice options - all 5 chords in random order
+        const allChoices = generateAllChoices(config.allowedChords);
         
         questions.push({
           id: i + 1,

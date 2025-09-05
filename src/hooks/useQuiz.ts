@@ -24,6 +24,7 @@ export function useQuiz() {
     const answer: QuizAnswer = {
       questionId: currentQuestion.id,
       selectedAnswer,
+      correctAnswer: currentQuestion.correctAnswer,
       isCorrect,
     };
 

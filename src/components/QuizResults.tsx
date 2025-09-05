@@ -94,10 +94,13 @@ export default function QuizResults({ results, onStartNewQuiz, onBackToVisualize
                 {!answer.isCorrect && (
                   <>
                     <span className="text-sm text-gray-500 dark:text-gray-400">→ Correct:</span>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                      {/* We don't have the correct answer stored in QuizAnswer, so just show text */}
-                      See question review
-                    </span>
+                    <div
+                      className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-medium"
+                      style={{ backgroundColor: CAGED_SHAPE_DATA[answer.correctAnswer].color }}
+                      title={`Correct answer: ${answer.correctAnswer} Major`}
+                    >
+                      {answer.correctAnswer}
+                    </div>
                   </>
                 )}
               </div>
