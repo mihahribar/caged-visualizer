@@ -28,7 +28,7 @@ export default function AppNavigation() {
                 key={page}
                 onClick={() => navigateTo(page)}
                 className={`
-                  px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
+                  px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 cursor-pointer
                   focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900
                   ${currentPage === page
                     ? 'bg-blue-600 text-white shadow-sm focus:ring-blue-500'

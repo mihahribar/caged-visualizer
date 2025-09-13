@@ -113,13 +113,13 @@ export default function QuizResults({ results, onStartNewQuiz, onBackToVisualize
       <div className="flex justify-center gap-4">
         <button
           onClick={onStartNewQuiz}
-          className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+          className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer"
         >
           Take Another Quiz
         </button>
         <button
           onClick={onBackToVisualizer}
-          className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
+          className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer"
         >
           Back to Visualizer
         </button>
