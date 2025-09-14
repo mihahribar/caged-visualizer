@@ -136,7 +136,7 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
                     : 'shadow-lg transform scale-105 focus:ring-white'
                   : showFeedback
                     ? 'opacity-30 cursor-not-allowed'
-                    : 'opacity-60 hover:opacity-80 focus:ring-gray-400'
+                    : 'opacity-60 hover:opacity-80 focus:ring-gray-400 cursor-pointer'
                 }
                 ${showFeedback && choice === question.correctAnswer && selectedAnswer !== choice
                   ? 'ring-2 ring-green-400 opacity-90'
@@ -158,7 +158,7 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
         {selectedAnswer && !showFeedback && (
           <button
             onClick={handleSubmit}
-            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer"
           >
             Submit Answer
           </button>

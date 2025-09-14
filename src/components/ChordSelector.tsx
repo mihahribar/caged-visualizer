@@ -27,7 +27,7 @@ export default function ChordSelector({ selectedChord, onChordChange }: ChordSel
               key={value}
               onClick={() => onChordChange(value)}
               className={`
-                px-6 py-3 rounded-lg font-medium text-sm text-white transition-all duration-200
+                px-6 py-3 rounded-lg font-medium text-sm text-white transition-all duration-200 cursor-pointer
                 min-w-[100px] focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:outline-none
                 ${selectedChord === value
                   ? 'shadow-lg transform scale-105 focus:ring-white'
