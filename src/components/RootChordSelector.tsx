@@ -20,11 +20,11 @@ export default function RootChordSelector({
 }: EnhancedNavigationPanelProps) {
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-4 mb-6">
+    <div className="bg-white dark:bg-gray-900 p-2 mb-6">
       {/* Chord Selection Section */}
       <section className="mb-4" aria-label="Chord selection">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-100">
+          <h3 className="text-base font-light text-gray-800 dark:text-gray-100">
             Choose Root Chord
           </h3>
           <div className="text-xs text-gray-500 dark:text-gray-400">
