@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ChordType } from '../types';
-import { CHROMATIC_VALUES, CAGED_SHAPE_DATA, STRING_TUNING, PENTATONIC_INTERVALS } from '../constants';
+import { CHROMATIC_VALUES, CAGED_SHAPE_DATA, STRING_TUNING, PENTATONIC_INTERVALS, CHROMATIC_TO_NOTE_NAME, NATURAL_NOTE_POSITIONS } from '../constants';
 
 export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[]) {
   const shapePositions = useMemo(() => {
@@ -88,6 +88,19 @@ export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[])
     return positions;
   }, [isPentatonicNote]);
 
+  // Get the note name at a specific string and fret
+  const getNoteNameAtFret = (stringIndex: number, fretNumber: number): string => {
+    const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
+    return CHROMATIC_TO_NOTE_NAME[chromaticValue];
+  };
+
+  // Check if a note at a specific position should be shown (natural notes only)
+  const shouldShowNoteName = (stringIndex: number, fretNumber: number): boolean => {
+    const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
+    // Only show if the chromatic value corresponds to actual natural notes (no sharps/flats)
+    return NATURAL_NOTE_POSITIONS.includes(chromaticValue as typeof NATURAL_NOTE_POSITIONS[number]);
+  };
+
   return {
     shapePositions,
     getShapeFret,
@@ -95,5 +108,7 @@ export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[])
     createGradientStyle,
     isPentatonicNote,
     getPentatonicPositions,
+    getNoteNameAtFret,
+    shouldShowNoteName,
   };
 }
