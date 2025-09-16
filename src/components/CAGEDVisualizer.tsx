@@ -10,11 +10,11 @@ import {
 
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
-  const { selectedChord, currentPosition, showAllShapes, showPentatonic } = state;
+  const { selectedChord, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
-  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote } = useCAGEDLogic(selectedChord, cagedSequence);
+  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote, getNoteNameAtFret, shouldShowNoteName } = useCAGEDLogic(selectedChord, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
 
@@ -82,10 +82,13 @@ const CAGEDVisualizer = () => {
         currentShape={currentShape}
         showAllShapes={showAllShapes}
         showPentatonic={showPentatonic}
+        showAllNotes={showAllNotes}
         shouldShowDot={shouldShowDot}
         getDotStyle={getDotStyle}
         isRootNote={isRootNote}
         shouldShowPentatonicDot={shouldShowPentatonicDot}
+        shouldShowNoteName={shouldShowNoteName}
+        getNoteNameAtFret={getNoteNameAtFret}
       />
 
       <PositionControls
@@ -95,11 +98,13 @@ const CAGEDVisualizer = () => {
         cagedSequence={cagedSequence}
         showAllShapes={showAllShapes}
         showPentatonic={showPentatonic}
+        showAllNotes={showAllNotes}
         onPreviousPosition={previousPosition}
         onNextPosition={nextPosition}
         onSetPosition={actions.setPosition}
         onToggleShowAllShapes={actions.toggleShowAllShapes}
         onToggleShowPentatonic={actions.toggleShowPentatonic}
+        onToggleShowAllNotes={actions.toggleShowAllNotes}
       />
     </div>
   );

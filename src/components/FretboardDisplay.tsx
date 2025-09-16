@@ -6,20 +6,26 @@ interface FretboardDisplayProps {
   currentShape: string;
   showAllShapes: boolean;
   showPentatonic: boolean;
+  showAllNotes: boolean;
   shouldShowDot: (stringIndex: number, fretNumber: number) => boolean;
   getDotStyle: (stringIndex: number, fretNumber: number) => React.CSSProperties | undefined;
   isRootNote: (stringIndex: number, fretNumber: number) => boolean;
   shouldShowPentatonicDot: (stringIndex: number, fretNumber: number) => boolean;
+  shouldShowNoteName: (stringIndex: number, fretNumber: number) => boolean;
+  getNoteNameAtFret: (stringIndex: number, fretNumber: number) => string;
 }
 
 export default function FretboardDisplay({
   selectedChord,
   showAllShapes,
   showPentatonic,
+  showAllNotes,
   shouldShowDot,
   getDotStyle,
   isRootNote,
-  shouldShowPentatonicDot
+  shouldShowPentatonicDot,
+  shouldShowNoteName,
+  getNoteNameAtFret
 }: FretboardDisplayProps) {
   return (
     <section className="bg-amber-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm" aria-label="Guitar fretboard">
@@ -85,6 +91,19 @@ export default function FretboardDisplay({
                       className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-green-500 dark:border-green-400 bg-green-500/30 dark:bg-green-400/30"
                       aria-label={`Pentatonic scale note on ${stringName} string, fret ${fretIndex + 1}`}
                     />
+                  )}
+
+                  {/* Note name overlay */}
+                  {showAllNotes && shouldShowNoteName(stringIndex, fretIndex + 1) && (
+                    <div
+                      className="absolute top-0.5 left-0.5 text-xs font-semibold text-gray-600 dark:text-gray-300
+                                 bg-white/90 dark:bg-gray-800/90 rounded px-1 border border-gray-300 dark:border-gray-600
+                                 pointer-events-none z-20 leading-tight min-w-[1rem] text-center
+                                 sm:top-1 sm:left-1"
+                      aria-label={`Note ${getNoteNameAtFret(stringIndex, fretIndex + 1)} on ${stringName} string, fret ${fretIndex + 1}`}
+                    >
+                      {getNoteNameAtFret(stringIndex, fretIndex + 1)}
+                    </div>
                   )}
                 </td>
               ))}

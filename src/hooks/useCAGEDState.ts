@@ -6,6 +6,7 @@ interface CAGEDState {
   currentPosition: number;
   showAllShapes: boolean;
   showPentatonic: boolean;
+  showAllNotes: boolean;
 }
 
 type CAGEDAction =
@@ -14,7 +15,8 @@ type CAGEDAction =
   | { type: 'PREVIOUS_POSITION'; payload: { sequenceLength: number } }
   | { type: 'SET_POSITION'; payload: number }
   | { type: 'TOGGLE_SHOW_ALL_SHAPES' }
-  | { type: 'TOGGLE_SHOW_PENTATONIC' };
+  | { type: 'TOGGLE_SHOW_PENTATONIC' }
+  | { type: 'TOGGLE_SHOW_ALL_NOTES' };
 
 function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
   switch (action.type) {
@@ -49,6 +51,11 @@ function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
         ...state,
         showPentatonic: !state.showPentatonic,
       };
+    case 'TOGGLE_SHOW_ALL_NOTES':
+      return {
+        ...state,
+        showAllNotes: !state.showAllNotes,
+      };
     default:
       return state;
   }
@@ -59,6 +66,7 @@ const initialState: CAGEDState = {
   currentPosition: 0,
   showAllShapes: false,
   showPentatonic: false,
+  showAllNotes: false,
 };
 
 export function useCAGEDState() {
@@ -71,6 +79,7 @@ export function useCAGEDState() {
     setPosition: (position: number) => dispatch({ type: 'SET_POSITION', payload: position }),
     toggleShowAllShapes: () => dispatch({ type: 'TOGGLE_SHOW_ALL_SHAPES' }),
     toggleShowPentatonic: () => dispatch({ type: 'TOGGLE_SHOW_PENTATONIC' }),
+    toggleShowAllNotes: () => dispatch({ type: 'TOGGLE_SHOW_ALL_NOTES' }),
   };
   
   return {

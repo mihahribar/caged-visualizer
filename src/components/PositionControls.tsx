@@ -9,11 +9,13 @@ interface PositionControlsProps {
   cagedSequence: string[];
   showAllShapes: boolean;
   showPentatonic: boolean;
+  showAllNotes: boolean;
   onPreviousPosition: () => void;
   onNextPosition: () => void;
   onSetPosition: (position: number) => void;
   onToggleShowAllShapes: () => void;
   onToggleShowPentatonic: () => void;
+  onToggleShowAllNotes: () => void;
 }
 
 export default function PositionControls({
@@ -23,11 +25,13 @@ export default function PositionControls({
   cagedSequence,
   showAllShapes,
   showPentatonic,
+  showAllNotes,
   onPreviousPosition,
   onNextPosition,
   onSetPosition,
   onToggleShowAllShapes,
-  onToggleShowPentatonic
+  onToggleShowPentatonic,
+  onToggleShowAllNotes
 }: PositionControlsProps) {
   // Add keyboard navigation
   useEffect(() => {
@@ -74,12 +78,18 @@ export default function PositionControls({
           event.preventDefault();
           onToggleShowPentatonic();
           break;
+        case 'n':
+        case 'N':
+          if (event.ctrlKey || event.metaKey) return; // Don't interfere with new file, etc.
+          event.preventDefault();
+          onToggleShowAllNotes();
+          break;
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [showAllShapes, onPreviousPosition, onNextPosition, onSetPosition, cagedSequence.length, onToggleShowAllShapes, onToggleShowPentatonic]);
+  }, [showAllShapes, onPreviousPosition, onNextPosition, onSetPosition, cagedSequence.length, onToggleShowAllShapes, onToggleShowPentatonic, onToggleShowAllNotes]);
 
   return (
     <div className="mt-6">
@@ -191,7 +201,7 @@ export default function PositionControls({
               {showAllShapes
                 ? 'Overlapping notes show blended colors'
                 : 'Use position controls above'
-              } • Press Space to toggle view mode{showPentatonic ? ' • Press S for scale' : ''}
+              } • Press Space to toggle view mode{showPentatonic ? ' • Press S for scale' : ''}{showAllNotes ? ' • Press N for notes' : ''}
             </p>
           </div>
 
@@ -202,6 +212,17 @@ export default function PositionControls({
               </p>
               <p className="text-xs">
                 Green dots: scale notes • Green rings: chord + scale overlap
+              </p>
+            </div>
+          )}
+
+          {showAllNotes && (
+            <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+              <p className="font-medium text-blue-600 dark:text-blue-400 text-sm">
+                Natural Note Names Active
+              </p>
+              <p className="text-xs">
+                Letter labels: natural notes (E,F,G,A,B,C,D) on all fret positions
               </p>
             </div>
           )}
@@ -255,6 +276,30 @@ export default function PositionControls({
             </button>
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {showPentatonic ? 'ON' : 'OFF'}
+            </span>
+          </div>
+
+          {/* All Notes Toggle */}
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-700 dark:text-gray-300">All Notes</span>
+            <button
+                onClick={onToggleShowAllNotes}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+                    showAllNotes
+                        ? 'bg-blue-600 dark:bg-blue-500'
+                        : 'bg-gray-200 dark:bg-gray-600'
+                }`}
+                aria-pressed={showAllNotes}
+                aria-label={showAllNotes ? 'Hide note names on fretboard' : 'Show note names on fretboard'}
+            >
+              <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                      showAllNotes ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+              />
+            </button>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {showAllNotes ? 'ON' : 'OFF'}
             </span>
           </div>
         </div>
