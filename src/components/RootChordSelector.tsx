@@ -14,7 +14,7 @@ const chords: { value: ChordType; label: string }[] = [
   { value: 'D', label: 'D Major' }
 ];
 
-export default function EnhancedNavigationPanel({
+export default function RootChordSelector({
   selectedChord,
   onChordChange
 }: EnhancedNavigationPanelProps) {

@@ -1,7 +1,7 @@
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
-import EnhancedNavigationPanel from './EnhancedNavigationPanel';
+import RootChordSelector from './RootChordSelector.tsx';
 import PositionControls from './PositionControls';
 import FretboardDisplay from './FretboardDisplay';
 import {
@@ -72,7 +72,7 @@ const CAGEDVisualizer = () => {
   return (
     <div className="max-w-6xl mx-auto p-8">
 
-      <EnhancedNavigationPanel
+      <RootChordSelector
         selectedChord={selectedChord}
         onChordChange={actions.setChord}
       />
