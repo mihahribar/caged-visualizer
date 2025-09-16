@@ -1,10 +1,7 @@
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
-import ChordSelector from './ChordSelector';
-import NavigationControls from './NavigationControls';
-import ShowAllToggle from './ShowAllToggle';
-import PentatonicToggle from './PentatonicToggle';
+import EnhancedNavigationPanel from './EnhancedNavigationPanel';
 import FretboardDisplay from './FretboardDisplay';
 import {
   CAGED_SHAPE_DATA
@@ -73,36 +70,20 @@ const CAGEDVisualizer = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-8">
-      {/* Page Description */}
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-light text-gray-800 dark:text-gray-100 mb-2">Interactive Visualizer</h2>
-        <p className="text-gray-600 dark:text-gray-300">Learn the same chord using different shapes down the neck</p>
-      </div>
 
-      <ChordSelector
-        selectedChord={selectedChord}
-        onChordChange={actions.setChord}
-      />
-
-      <NavigationControls
+      <EnhancedNavigationPanel
         selectedChord={selectedChord}
         currentPosition={currentPosition}
         currentShape={currentShape}
         cagedSequence={cagedSequence}
+        showAllShapes={showAllShapes}
+        showPentatonic={showPentatonic}
+        onChordChange={actions.setChord}
         onPreviousPosition={previousPosition}
         onNextPosition={nextPosition}
         onSetPosition={actions.setPosition}
-        showAllShapes={showAllShapes}
-      />
-
-      <ShowAllToggle
-        showAllShapes={showAllShapes}
-        onToggle={actions.toggleShowAllShapes}
-      />
-
-      <PentatonicToggle
-        showPentatonic={showPentatonic}
-        onToggle={actions.toggleShowPentatonic}
+        onToggleShowAllShapes={actions.toggleShowAllShapes}
+        onToggleShowPentatonic={actions.toggleShowPentatonic}
       />
 
       <FretboardDisplay
@@ -115,22 +96,6 @@ const CAGEDVisualizer = () => {
         isRootNote={isRootNote}
         shouldShowPentatonicDot={shouldShowPentatonicDot}
       />
-
-      {/* Instructions */}
-      <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-300 space-y-1" role="region" aria-label="Instructions">
-        <p>Choose a CAGED chord, then cycle through the 5 shapes to see different ways to play it</p>
-        <p>Each shape shows the same chord at a different position on the neck</p>
-        {showAllShapes && (
-          <p className="font-medium">
-            Showing all 5 CAGED positions for {selectedChord} major - overlapping notes show blended colors
-          </p>
-        )}
-        {showPentatonic && (
-          <p className="font-medium">
-            Showing {selectedChord} major pentatonic scale - green dots show scale notes, green rings show chord+scale overlap
-          </p>
-        )}
-      </div>
     </div>
   );
 };
