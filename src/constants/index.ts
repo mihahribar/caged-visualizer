@@ -65,3 +65,12 @@ export const FULL_CAGED_SEQUENCE = ['C', 'A', 'G', 'E', 'D'] as const;
 
 // Major pentatonic scale intervals (semitones from root)
 export const PENTATONIC_INTERVALS = [0, 2, 4, 7, 9] as const;
+
+// Chromatic scale to natural note names mapping
+// Maps chromatic values (0-11) to natural note names only
+export const CHROMATIC_TO_NATURAL: readonly string[] = [
+  'C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'G', 'A', 'A', 'B'
+] as const;
+
+// Natural note names array for easy reference
+export const NATURAL_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
