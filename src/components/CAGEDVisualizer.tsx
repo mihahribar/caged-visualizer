@@ -125,6 +125,11 @@ const CAGEDVisualizer = () => {
             Showing all 5 CAGED positions for {selectedChord} major - overlapping notes show blended colors
           </p>
         )}
+        {showPentatonic && (
+          <p className="font-medium">
+            Showing {selectedChord} major pentatonic scale - green dots show scale notes, green rings show chord+scale overlap
+          </p>
+        )}
       </div>
     </div>
   );
