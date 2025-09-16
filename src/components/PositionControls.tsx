@@ -152,7 +152,7 @@ export default function PositionControls({
         <div className="flex justify-center items-center space-x-3 mb-3">
           <button
             onClick={onPreviousPosition}
-            className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none"
+            className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none cursor-pointer"
             aria-label="Previous chord shape"
             title="Previous shape (←)"
           >
@@ -176,7 +176,7 @@ export default function PositionControls({
 
           <button
             onClick={onNextPosition}
-            className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none"
+            className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-500 focus:outline-none cursor-pointer"
             aria-label="Next chord shape"
             title="Next shape (→)"
           >
@@ -192,7 +192,7 @@ export default function PositionControls({
             <button
               key={shape}
               onClick={() => onSetPosition(index)}
-              className={`relative w-8 h-8 rounded-md text-white text-sm font-bold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none ${
+              className={`relative w-8 h-8 rounded-md text-white text-sm font-bold transition-all duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none cursor-pointer ${
                 index === currentPosition
                   ? 'scale-110 shadow-lg focus:ring-white ring-2 ring-white ring-opacity-30'
                   : 'opacity-50 hover:opacity-75 focus:ring-gray-400'
