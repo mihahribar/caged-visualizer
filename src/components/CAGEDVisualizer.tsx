@@ -2,6 +2,7 @@ import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
 import EnhancedNavigationPanel from './EnhancedNavigationPanel';
+import PositionControls from './PositionControls';
 import FretboardDisplay from './FretboardDisplay';
 import {
   CAGED_SHAPE_DATA
@@ -73,17 +74,7 @@ const CAGEDVisualizer = () => {
 
       <EnhancedNavigationPanel
         selectedChord={selectedChord}
-        currentPosition={currentPosition}
-        currentShape={currentShape}
-        cagedSequence={cagedSequence}
-        showAllShapes={showAllShapes}
-        showPentatonic={showPentatonic}
         onChordChange={actions.setChord}
-        onPreviousPosition={previousPosition}
-        onNextPosition={nextPosition}
-        onSetPosition={actions.setPosition}
-        onToggleShowAllShapes={actions.toggleShowAllShapes}
-        onToggleShowPentatonic={actions.toggleShowPentatonic}
       />
 
       <FretboardDisplay
@@ -95,6 +86,20 @@ const CAGEDVisualizer = () => {
         getDotStyle={getDotStyle}
         isRootNote={isRootNote}
         shouldShowPentatonicDot={shouldShowPentatonicDot}
+      />
+
+      <PositionControls
+        selectedChord={selectedChord}
+        currentPosition={currentPosition}
+        currentShape={currentShape}
+        cagedSequence={cagedSequence}
+        showAllShapes={showAllShapes}
+        showPentatonic={showPentatonic}
+        onPreviousPosition={previousPosition}
+        onNextPosition={nextPosition}
+        onSetPosition={actions.setPosition}
+        onToggleShowAllShapes={actions.toggleShowAllShapes}
+        onToggleShowPentatonic={actions.toggleShowPentatonic}
       />
     </div>
   );
