@@ -16,7 +16,7 @@ const CAGEDVisualizer = () => {
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
-  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle } = useCAGEDLogic(selectedChord, cagedSequence);
+  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote } = useCAGEDLogic(selectedChord, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
 
@@ -56,6 +56,11 @@ const CAGEDVisualizer = () => {
       const shape = CAGED_SHAPE_DATA[currentShape];
       return shape.rootNotes.includes(stringIndex) && shouldShowDot(stringIndex, fretNumber);
     }
+  };
+
+  // Check if a pentatonic dot should be shown at this position
+  const shouldShowPentatonicDot = (stringIndex: number, fretNumber: number) => {
+    return isPentatonicNote(stringIndex, fretNumber);
   };
 
   const nextPosition = () => {
@@ -104,9 +109,11 @@ const CAGEDVisualizer = () => {
         selectedChord={selectedChord}
         currentShape={currentShape}
         showAllShapes={showAllShapes}
+        showPentatonic={showPentatonic}
         shouldShowDot={shouldShowDot}
         getDotStyle={getDotStyle}
         isRootNote={isRootNote}
+        shouldShowPentatonicDot={shouldShowPentatonicDot}
       />
 
       {/* Instructions */}
