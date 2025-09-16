@@ -49,13 +49,13 @@ export default function QuizPage() {
           <div className="flex justify-center gap-4">
             <button
               onClick={startNewQuiz}
-              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg"
+              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
             >
               Start Quiz
             </button>
             <button
               onClick={handleBackToVisualizer}
-              className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 text-lg"
+              className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
             >
               Back to Visualizer
             </button>
