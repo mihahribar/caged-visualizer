@@ -4,7 +4,6 @@ import { CAGED_SHAPE_DATA } from '../constants';
 interface ConsolidatedNavigationProps {
   selectedChord: ChordType;
   currentPosition: number;
-  currentShape: string;
   cagedSequence: string[];
   showAllShapes: boolean;
   onChordChange: (chord: ChordType) => void;
@@ -24,7 +23,6 @@ const chords: { value: ChordType; label: string }[] = [
 export default function ConsolidatedNavigation({
   selectedChord,
   currentPosition,
-  currentShape,
   cagedSequence,
   showAllShapes,
   onChordChange,

@@ -88,7 +88,6 @@ const CAGEDVisualizer = () => {
       <ConsolidatedNavigation
         selectedChord={selectedChord}
         currentPosition={currentPosition}
-        currentShape={currentShape}
         cagedSequence={cagedSequence}
         showAllShapes={showAllShapes}
         onChordChange={actions.setChord}
