@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { ChordType } from '../types';
-import { CHROMATIC_VALUES, CAGED_SHAPE_DATA } from '../constants';
+import { CHROMATIC_VALUES, CAGED_SHAPE_DATA, STRING_TUNING, PENTATONIC_INTERVALS } from '../constants';
 
 export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[]) {
   const shapePositions = useMemo(() => {
@@ -48,7 +48,7 @@ export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[])
       };
     } else if (shapes.length > 2) {
       const colors = shapes.map(shape => CAGED_SHAPE_DATA[shape].color);
-      const gradientStops = colors.map((color, i) => 
+      const gradientStops = colors.map((color, i) =>
         `${color} ${(i * 100 / colors.length)}%, ${color} ${((i + 1) * 100 / colors.length)}%`
       ).join(', ');
       return {
@@ -57,10 +57,43 @@ export function useCAGEDLogic(selectedChord: ChordType, cagedSequence: string[])
     }
   };
 
+  // Get the note at a specific string and fret (as chromatic value)
+  const getNoteAtFret = (stringIndex: number, fretNumber: number) => {
+    return (STRING_TUNING[stringIndex] + fretNumber) % 12;
+  };
+
+  // Check if a note at a specific position is part of the pentatonic scale
+  const isPentatonicNote = useMemo(() => {
+    const rootNote = CHROMATIC_VALUES[selectedChord];
+    const pentatonicNotes = PENTATONIC_INTERVALS.map(interval => (rootNote + interval) % 12);
+
+    return (stringIndex: number, fretNumber: number) => {
+      const noteAtFret = getNoteAtFret(stringIndex, fretNumber);
+      return pentatonicNotes.includes(noteAtFret);
+    };
+  }, [selectedChord]);
+
+  // Get all pentatonic note positions for the current chord
+  const getPentatonicPositions = useMemo(() => {
+    const positions: Array<{ stringIndex: number; fretNumber: number }> = [];
+
+    for (let stringIndex = 0; stringIndex < STRING_TUNING.length; stringIndex++) {
+      for (let fretNumber = 0; fretNumber <= 15; fretNumber++) {
+        if (isPentatonicNote(stringIndex, fretNumber)) {
+          positions.push({ stringIndex, fretNumber });
+        }
+      }
+    }
+
+    return positions;
+  }, [isPentatonicNote]);
+
   return {
     shapePositions,
     getShapeFret,
     getShapesAtPosition,
     createGradientStyle,
+    isPentatonicNote,
+    getPentatonicPositions,
   };
 }

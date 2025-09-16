@@ -4,6 +4,9 @@ export const TOTAL_FRETS = 15;
 
 export const STRING_NAMES = ['E', 'B', 'G', 'D', 'A', 'E'] as const;
 
+// Standard guitar tuning (semitones from C)
+export const STRING_TUNING = [4, 11, 7, 2, 9, 4] as const; // E(4), B(11), G(7), D(2), A(9), E(4)
+
 export const CAGED_SHAPE_DATA: CAGEDShapeData = {
   C: {
     name: 'C Shape',
@@ -59,3 +62,6 @@ export const NATURAL_STARTING_SHAPES = {
 } as const;
 
 export const FULL_CAGED_SEQUENCE = ['C', 'A', 'G', 'E', 'D'] as const;
+
+// Major pentatonic scale intervals (semitones from root)
+export const PENTATONIC_INTERVALS = [0, 2, 4, 7, 9] as const;
