@@ -6,6 +6,7 @@ An interactive web application for learning the CAGED guitar system.
 - Visual fretboard with color-coded chord shapes
 - Navigate through all 5 CAGED positions for any chord
 - Show individual shapes or all shapes at once
+- **Major Pentatonic Scale Overlay** - Optional toggle to show pentatonic scale notes over chord shapes for music theory context
 - **Quiz Mode** - Interactive chord identification quiz with scoring system
 - Dark/Light theme toggle with system preference detection
 - Authentic neck inlay dots for reference
@@ -31,6 +32,7 @@ An interactive web application for learning the CAGED guitar system.
 - Select a CAGED chord (C, A, G, E, or D)
 - Use Previous/Next buttons to cycle through the 5 shapes
 - Toggle "Show All CAGED Shapes" to see the complete pattern
+- Toggle "Show Pentatonic Scale" to overlay major pentatonic scale notes in green
 - Click on any colored circle in the progress indicator to jump to that shape
 
 ### Quiz Mode

@@ -4,6 +4,7 @@ import { useCAGEDState } from '../hooks/useCAGEDState';
 import ChordSelector from './ChordSelector';
 import NavigationControls from './NavigationControls';
 import ShowAllToggle from './ShowAllToggle';
+import PentatonicToggle from './PentatonicToggle';
 import FretboardDisplay from './FretboardDisplay';
 import {
   CAGED_SHAPE_DATA
@@ -11,11 +12,11 @@ import {
 
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
-  const { selectedChord, currentPosition, showAllShapes } = state;
+  const { selectedChord, currentPosition, showAllShapes, showPentatonic } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
-  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle } = useCAGEDLogic(selectedChord, cagedSequence);
+  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote } = useCAGEDLogic(selectedChord, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
 
@@ -57,6 +58,11 @@ const CAGEDVisualizer = () => {
     }
   };
 
+  // Check if a pentatonic dot should be shown at this position
+  const shouldShowPentatonicDot = (stringIndex: number, fretNumber: number) => {
+    return isPentatonicNote(stringIndex, fretNumber);
+  };
+
   const nextPosition = () => {
     actions.nextPosition(cagedSequence.length);
   };
@@ -94,13 +100,20 @@ const CAGEDVisualizer = () => {
         onToggle={actions.toggleShowAllShapes}
       />
 
+      <PentatonicToggle
+        showPentatonic={showPentatonic}
+        onToggle={actions.toggleShowPentatonic}
+      />
+
       <FretboardDisplay
         selectedChord={selectedChord}
         currentShape={currentShape}
         showAllShapes={showAllShapes}
+        showPentatonic={showPentatonic}
         shouldShowDot={shouldShowDot}
         getDotStyle={getDotStyle}
         isRootNote={isRootNote}
+        shouldShowPentatonicDot={shouldShowPentatonicDot}
       />
 
       {/* Instructions */}
@@ -110,6 +123,11 @@ const CAGEDVisualizer = () => {
         {showAllShapes && (
           <p className="font-medium">
             Showing all 5 CAGED positions for {selectedChord} major - overlapping notes show blended colors
+          </p>
+        )}
+        {showPentatonic && (
+          <p className="font-medium">
+            Showing {selectedChord} major pentatonic scale - green dots show scale notes, green rings show chord+scale overlap
           </p>
         )}
       </div>

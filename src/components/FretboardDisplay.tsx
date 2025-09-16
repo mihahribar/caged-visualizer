@@ -5,17 +5,21 @@ interface FretboardDisplayProps {
   selectedChord: ChordType;
   currentShape: string;
   showAllShapes: boolean;
+  showPentatonic: boolean;
   shouldShowDot: (stringIndex: number, fretNumber: number) => boolean;
   getDotStyle: (stringIndex: number, fretNumber: number) => React.CSSProperties | undefined;
   isRootNote: (stringIndex: number, fretNumber: number) => boolean;
+  shouldShowPentatonicDot: (stringIndex: number, fretNumber: number) => boolean;
 }
 
 export default function FretboardDisplay({
   selectedChord,
   showAllShapes,
+  showPentatonic,
   shouldShowDot,
   getDotStyle,
-  isRootNote
+  isRootNote,
+  shouldShowPentatonicDot
 }: FretboardDisplayProps) {
   return (
     <section className="bg-amber-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm" aria-label="Guitar fretboard">
@@ -65,12 +69,22 @@ export default function FretboardDisplay({
                     <div
                       className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium shadow-sm ${
                         isRootNote(stringIndex, fretIndex + 1) ? 'ring-2 ring-gray-800 dark:ring-gray-200' : ''
+                      } ${
+                        showPentatonic && shouldShowPentatonicDot(stringIndex, fretIndex + 1) ? 'ring-2 ring-green-500 dark:ring-green-400' : ''
                       }`}
                       style={getDotStyle(stringIndex, fretIndex + 1)}
-                      aria-label={`${isRootNote(stringIndex, fretIndex + 1) ? 'Root note' : 'Chord note'} on ${stringName} string, fret ${fretIndex + 1}`}
+                      aria-label={`${isRootNote(stringIndex, fretIndex + 1) ? 'Root note' : 'Chord note'}${showPentatonic && shouldShowPentatonicDot(stringIndex, fretIndex + 1) ? ' (also pentatonic scale note)' : ''} on ${stringName} string, fret ${fretIndex + 1}`}
                     >
                       {isRootNote(stringIndex, fretIndex + 1) ? 'R' : ''}
                     </div>
+                  )}
+
+                  {/* Pentatonic overlay dot */}
+                  {showPentatonic && shouldShowPentatonicDot(stringIndex, fretIndex + 1) && !shouldShowDot(stringIndex, fretIndex + 1) && (
+                    <div
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-green-500 dark:border-green-400 bg-green-500/30 dark:bg-green-400/30"
+                      aria-label={`Pentatonic scale note on ${stringName} string, fret ${fretIndex + 1}`}
+                    />
                   )}
                 </td>
               ))}

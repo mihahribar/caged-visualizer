@@ -5,6 +5,7 @@ interface CAGEDState {
   selectedChord: ChordType;
   currentPosition: number;
   showAllShapes: boolean;
+  showPentatonic: boolean;
 }
 
 type CAGEDAction =
@@ -12,7 +13,8 @@ type CAGEDAction =
   | { type: 'NEXT_POSITION'; payload: { sequenceLength: number } }
   | { type: 'PREVIOUS_POSITION'; payload: { sequenceLength: number } }
   | { type: 'SET_POSITION'; payload: number }
-  | { type: 'TOGGLE_SHOW_ALL_SHAPES' };
+  | { type: 'TOGGLE_SHOW_ALL_SHAPES' }
+  | { type: 'TOGGLE_SHOW_PENTATONIC' };
 
 function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
   switch (action.type) {
@@ -42,6 +44,11 @@ function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
         ...state,
         showAllShapes: !state.showAllShapes,
       };
+    case 'TOGGLE_SHOW_PENTATONIC':
+      return {
+        ...state,
+        showPentatonic: !state.showPentatonic,
+      };
     default:
       return state;
   }
@@ -51,6 +58,7 @@ const initialState: CAGEDState = {
   selectedChord: 'C',
   currentPosition: 0,
   showAllShapes: false,
+  showPentatonic: false,
 };
 
 export function useCAGEDState() {
@@ -62,6 +70,7 @@ export function useCAGEDState() {
     previousPosition: (sequenceLength: number) => dispatch({ type: 'PREVIOUS_POSITION', payload: { sequenceLength } }),
     setPosition: (position: number) => dispatch({ type: 'SET_POSITION', payload: position }),
     toggleShowAllShapes: () => dispatch({ type: 'TOGGLE_SHOW_ALL_SHAPES' }),
+    toggleShowPentatonic: () => dispatch({ type: 'TOGGLE_SHOW_PENTATONIC' }),
   };
   
   return {
