@@ -1,8 +1,9 @@
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
-import RootChordSelector from './RootChordSelector.tsx';
-import PositionControls from './PositionControls';
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
+import ConsolidatedNavigation from './ConsolidatedNavigation';
+import ViewModeToggles from './ViewModeToggles';
 import FretboardDisplay from './FretboardDisplay';
 import {
   CAGED_SHAPE_DATA
@@ -69,12 +70,30 @@ const CAGEDVisualizer = () => {
     actions.previousPosition(cagedSequence.length);
   };
 
+  // Add keyboard navigation
+  useKeyboardNavigation({
+    showAllShapes,
+    cagedSequenceLength: cagedSequence.length,
+    onPreviousPosition: previousPosition,
+    onNextPosition: nextPosition,
+    onSetPosition: actions.setPosition,
+    onToggleShowAllShapes: actions.toggleShowAllShapes,
+    onToggleShowPentatonic: actions.toggleShowPentatonic,
+    onToggleShowAllNotes: actions.toggleShowAllNotes
+  });
+
   return (
     <div className="max-w-6xl mx-auto p-8">
 
-      <RootChordSelector
+      <ConsolidatedNavigation
         selectedChord={selectedChord}
+        currentPosition={currentPosition}
+        cagedSequence={cagedSequence}
+        showAllShapes={showAllShapes}
         onChordChange={actions.setChord}
+        onPreviousPosition={previousPosition}
+        onNextPosition={nextPosition}
+        onSetPosition={actions.setPosition}
       />
 
       <FretboardDisplay
@@ -91,17 +110,11 @@ const CAGEDVisualizer = () => {
         getNoteNameAtFret={getNoteNameAtFret}
       />
 
-      <PositionControls
+      <ViewModeToggles
         selectedChord={selectedChord}
-        currentPosition={currentPosition}
-        currentShape={currentShape}
-        cagedSequence={cagedSequence}
         showAllShapes={showAllShapes}
         showPentatonic={showPentatonic}
         showAllNotes={showAllNotes}
-        onPreviousPosition={previousPosition}
-        onNextPosition={nextPosition}
-        onSetPosition={actions.setPosition}
         onToggleShowAllShapes={actions.toggleShowAllShapes}
         onToggleShowPentatonic={actions.toggleShowPentatonic}
         onToggleShowAllNotes={actions.toggleShowAllNotes}
