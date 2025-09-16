@@ -4,6 +4,7 @@ import { useCAGEDState } from '../hooks/useCAGEDState';
 import ChordSelector from './ChordSelector';
 import NavigationControls from './NavigationControls';
 import ShowAllToggle from './ShowAllToggle';
+import PentatonicToggle from './PentatonicToggle';
 import FretboardDisplay from './FretboardDisplay';
 import {
   CAGED_SHAPE_DATA
@@ -11,7 +12,7 @@ import {
 
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
-  const { selectedChord, currentPosition, showAllShapes } = state;
+  const { selectedChord, currentPosition, showAllShapes, showPentatonic } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
@@ -92,6 +93,11 @@ const CAGEDVisualizer = () => {
       <ShowAllToggle
         showAllShapes={showAllShapes}
         onToggle={actions.toggleShowAllShapes}
+      />
+
+      <PentatonicToggle
+        showPentatonic={showPentatonic}
+        onToggle={actions.toggleShowPentatonic}
       />
 
       <FretboardDisplay
