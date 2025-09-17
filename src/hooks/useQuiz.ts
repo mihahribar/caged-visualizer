@@ -1,5 +1,6 @@
 import { useQuizState } from './useQuizState';
 import { useQuizLogic } from './useQuizLogic';
+import { useQuizPreferences } from './useQuizPreferences';
 import { getQuizConfig } from '../constants/quizConfig';
 import type { ChordType, QuizAnswer } from '../types';
 
@@ -8,7 +9,8 @@ import type { ChordType, QuizAnswer } from '../types';
  * This is the primary interface for quiz functionality
  */
 export function useQuiz() {
-  const config = getQuizConfig();
+  const { preferences, isLoaded, getQuizConfig: getUserConfig, ...preferenceActions } = useQuizPreferences();
+  const config = getQuizConfig(getUserConfig());
   const { state, actions, currentQuestion, progress, scorePercentage } = useQuizState();
   const { generateQuestions, validateAnswer, getQuestionDescription } = useQuizLogic(config);
 
@@ -51,12 +53,13 @@ export function useQuiz() {
 
   const getResults = () => {
     if (!state.isCompleted) return null;
-    
+
     return {
       totalQuestions: state.totalQuestions,
       correctAnswers: state.score,
       percentage: scorePercentage,
       answers: state.answers,
+      questions: state.questions,
     };
   };
 
@@ -67,16 +70,21 @@ export function useQuiz() {
     progress,
     scorePercentage,
     config,
-    
-    // Actions  
+    preferences,
+    isLoaded,
+
+    // Actions
     startNewQuiz,
     submitAnswer,
     resetQuiz,
-    
+
+    // Preference actions
+    ...preferenceActions,
+
     // Helpers
     getCurrentQuestionDescription,
     getResults,
-    
+
     // Status flags
     isIdle: !state.isActive && !state.isCompleted,
     isActive: state.isActive,

@@ -1,7 +1,7 @@
 # CAGED Visualizer Project - Claude Development Guide
 
 ## Project Overview
-Interactive React web application for learning the CAGED guitar system - a guitar learning method that teaches 5 chord shapes that can be moved up and down the neck. The app includes both an interactive visualizer and a quiz mode for chord identification practice.
+Interactive React web application for learning the CAGED guitar system - a guitar learning method that teaches 5 chord shapes that can be moved up and down the neck. The app includes both an interactive visualizer and a quiz mode for chord identification practice. **Now supports both major and minor chord qualities** with complete CAGED implementation for all chord types.
 
 **Live Site**: [caged.hribar.org](https://caged.hribar.org)
 
@@ -118,12 +118,28 @@ npm run preview  # Preview production build locally
 - **Domain**: Custom domain configured via CNAME
 
 ## Music Theory Context (CAGED System)
-The app implements the CAGED guitar system:
-- **5 chord shapes**: C, A, G, E, D - moveable patterns
-- **Chromatic intervals**: Mathematical chord transposition
+The app implements the CAGED guitar system with full major and minor chord support:
+
+### Chord Shapes and Qualities
+- **5 chord shapes**: C, A, G, E, D - moveable patterns for both major and minor
+- **Major chord patterns**: Original CAGED system implementation
+- **Minor chord patterns**: Parallel implementation with flattened thirds
+- **Chord quality toggle**: Seamless switching between major/minor via `ChordQuality` type
+
+### Music Theory Implementation
+- **Chromatic intervals**: Mathematical chord transposition for all qualities
+- **Major chord intervals**: Root (0), Major Third (4), Perfect Fifth (7)
+- **Minor chord intervals**: Root (0), Minor Third (3), Perfect Fifth (7)
+- **Pentatonic scales**: Major (0,2,4,7,9) and Minor (0,3,5,7,10) pentatonic intervals
 - **Fretboard logic**: 15 frets, standard tuning (E-A-D-G-B-E)
-- **Pattern calculation**: Shape + position = chord voicing
-- **Visual overlays**: Color-coded shapes with gradient blending
+- **Pattern calculation**: Shape + quality + position = chord voicing
+- **Visual overlays**: Color-coded shapes with gradient blending for overlapping patterns
+
+### Data Structure Organization
+- **`CAGED_SHAPES_BY_QUALITY`**: Combined data structure organizing major/minor patterns
+- **Dynamic shape selection**: Runtime selection based on `chordQuality` state
+- **Consistent color coding**: Same colors for major/minor versions of each shape
+- **Root note preservation**: Same root note positions for major/minor variants
 
 ## Claude-Specific Guidance
 

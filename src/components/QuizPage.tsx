@@ -1,39 +1,27 @@
 import { useQuiz } from '../hooks/useQuiz';
-import { useNavigation } from '../hooks/useNavigation';
 import QuizQuestion from './QuizQuestion';
 import QuizResults from './QuizResults';
 import QuizProgress from './QuizProgress';
+import QuizModeToggle from './QuizModeToggle';
 
 export default function QuizPage() {
-  const { navigateTo } = useNavigation();
   const {
     isIdle,
     isActive,
     isCompleted,
     currentQuestion,
     progress,
+    preferences,
     startNewQuiz,
     submitAnswer,
-    resetQuiz,
     getResults,
+    updateQuizMode,
   } = useQuiz();
-
-  const handleBackToVisualizer = () => {
-    resetQuiz();
-    navigateTo('visualizer');
-  };
 
   if (isIdle) {
     return (
       <div className="max-w-4xl mx-auto p-8">
         <div className="text-center">
-          <h2 className="text-2xl font-light text-gray-800 dark:text-gray-100 mb-2">
-            CAGED Quiz Mode
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-8">
-            Test your knowledge of chord identification using the CAGED system
-          </p>
-          
           <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8 max-w-2xl mx-auto">
             <h2 className="text-lg font-medium text-gray-800 dark:text-gray-100 mb-4">
               How it works:
@@ -42,22 +30,24 @@ export default function QuizPage() {
               <li>• You'll see a chord pattern on the fretboard</li>
               <li>• Identify which root chord is being played</li>
               <li>• Choose from multiple choice answers</li>
-              <li>• Complete 5 questions to see your score</li>
+              <li>• Complete {preferences.questionCount} questions to see your score</li>
             </ul>
           </div>
-          
-          <div className="flex justify-center gap-4">
+
+          {/* Quiz Configuration */}
+          <div className="mb-8 max-w-sm mx-auto">
+            <QuizModeToggle
+              value={preferences.quizMode}
+              onChange={updateQuizMode}
+            />
+          </div>
+
+          <div className="flex justify-center">
             <button
               onClick={startNewQuiz}
               className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
             >
               Start Quiz
-            </button>
-            <button
-              onClick={handleBackToVisualizer}
-              className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
-            >
-              Back to Visualizer
             </button>
           </div>
         </div>
@@ -69,7 +59,11 @@ export default function QuizPage() {
     return (
       <div className="max-w-6xl mx-auto p-8">
         <div className="mb-6">
-          <QuizProgress progress={progress} />
+          <QuizProgress
+            progress={progress}
+            currentQuestion={currentQuestion?.id}
+            totalQuestions={preferences.questionCount}
+          />
         </div>
         
         <QuizQuestion
@@ -87,7 +81,6 @@ export default function QuizPage() {
         <QuizResults
           results={results}
           onStartNewQuiz={startNewQuiz}
-          onBackToVisualizer={handleBackToVisualizer}
         />
       </div>
     );

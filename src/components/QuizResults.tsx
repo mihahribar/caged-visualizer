@@ -1,5 +1,5 @@
-import type { QuizAnswer } from '../types';
-import { CAGED_SHAPE_DATA } from '../constants';
+import type { QuizAnswer, QuizQuestion } from '../types';
+import { CAGED_SHAPES_BY_QUALITY } from '../constants';
 
 interface QuizResultsProps {
   results: {
@@ -7,15 +7,15 @@ interface QuizResultsProps {
     correctAnswers: number;
     percentage: number;
     answers: QuizAnswer[];
+    questions: QuizQuestion[];
   } | null;
   onStartNewQuiz: () => void;
-  onBackToVisualizer: () => void;
 }
 
-export default function QuizResults({ results, onStartNewQuiz, onBackToVisualizer }: QuizResultsProps) {
+export default function QuizResults({ results, onStartNewQuiz }: QuizResultsProps) {
   if (!results) return null;
 
-  const { totalQuestions, correctAnswers, percentage, answers } = results;
+  const { totalQuestions, correctAnswers, percentage, answers, questions } = results;
   
   const getScoreMessage = (percentage: number): string => {
     if (percentage === 100) return "Perfect! You've mastered the CAGED system!";
@@ -63,65 +63,65 @@ export default function QuizResults({ results, onStartNewQuiz, onBackToVisualize
           Review Your Answers
         </h2>
         <div className="space-y-3">
-          {answers.map((answer, index) => (
-            <div 
-              key={answer.questionId}
-              className={`flex items-center justify-between p-4 rounded-lg ${
-                answer.isCorrect 
-                  ? 'bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400' 
-                  : 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-lg">
-                  {answer.isCorrect ? '✓' : '✗'}
-                </span>
-                <span className="text-gray-700 dark:text-gray-200">
-                  Question {index + 1}
-                </span>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Your answer:
-                </span>
-                <div
-                  className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-medium"
-                  style={{ backgroundColor: CAGED_SHAPE_DATA[answer.selectedAnswer].color }}
-                >
-                  {answer.selectedAnswer}
+          {answers.map((answer, index) => {
+            const question = questions.find(q => q.id === answer.questionId);
+            const chordQuality = question?.quality || 'major';
+            const qualityText = chordQuality === 'major' ? 'Major' : 'Minor';
+
+            return (
+              <div
+                key={answer.questionId}
+                className={`flex items-center justify-between p-4 rounded-lg ${
+                  answer.isCorrect
+                    ? 'bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400'
+                    : 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">
+                    {answer.isCorrect ? '✓' : '✗'}
+                  </span>
+                  <span className="text-gray-700 dark:text-gray-200">
+                    Question {index + 1} ({qualityText})
+                  </span>
                 </div>
-                {!answer.isCorrect && (
-                  <>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">→ Correct:</span>
-                    <div
-                      className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-medium"
-                      style={{ backgroundColor: CAGED_SHAPE_DATA[answer.correctAnswer].color }}
-                      title={`Correct answer: ${answer.correctAnswer} Major`}
-                    >
-                      {answer.correctAnswer}
-                    </div>
-                  </>
-                )}
+
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    Your answer:
+                  </span>
+                  <div
+                    className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-medium"
+                    style={{ backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][answer.selectedAnswer].color }}
+                  >
+                    {answer.selectedAnswer}
+                  </div>
+                  {!answer.isCorrect && (
+                    <>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">→ Correct:</span>
+                      <div
+                        className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-medium"
+                        style={{ backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][answer.correctAnswer].color }}
+                        title={`Correct answer: ${answer.correctAnswer} ${qualityText}`}
+                      >
+                        {answer.correctAnswer}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center">
         <button
           onClick={onStartNewQuiz}
           className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer"
         >
           Take Another Quiz
-        </button>
-        <button
-          onClick={onBackToVisualizer}
-          className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 cursor-pointer"
-        >
-          Back to Visualizer
         </button>
       </div>
 

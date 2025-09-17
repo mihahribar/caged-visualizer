@@ -3,13 +3,15 @@
 An interactive web application for learning the CAGED guitar system.
 
 ## Features
-- Visual fretboard with color-coded chord shapes
-- Navigate through all 5 CAGED positions for any chord
-- Show individual shapes or all shapes at once
-- **Major Pentatonic Scale Overlay** - Optional toggle to show pentatonic scale notes over chord shapes for music theory context
+- **Visual fretboard** with color-coded chord shapes
+- **Major and Minor Chord Support** - Full CAGED system implementation for both major and minor chord qualities
+- **Chord Quality Toggle** - Seamlessly switch between major and minor chord patterns
+- Navigate through all 5 CAGED positions for any chord (C, A, G, E, D)
+- Show individual shapes or all shapes at once with gradient blending
+- **Pentatonic Scale Overlay** - Toggle to show major/minor pentatonic scale notes over chord shapes for music theory context
 - **All Notes Display** - Toggle to show natural note names (E, F, G, A, B, C, D) on all fret positions for fretboard navigation
 - **Quiz Mode** - Interactive chord identification quiz with scoring system
-- Dark/Light theme toggle with system preference detection
+- **Dark/Light theme toggle** with system preference detection
 - Authentic neck inlay dots for reference
 - Clean, minimal design focused on learning
 
@@ -30,10 +32,10 @@ An interactive web application for learning the CAGED guitar system.
 ## Usage
 
 ### Visualizer Mode
-- Select a CAGED chord (C, A, G, E, or D)
+- **Select a root chord** (C, A, G, E, or D) and **chord quality** (Major/Minor)
 - Use Previous/Next buttons to cycle through the 5 shapes
-- Toggle "Show All CAGED Shapes" to see the complete pattern
-- Toggle "Show Pentatonic Scale" to overlay major pentatonic scale notes in green
+- Toggle "Show All CAGED Shapes" to see the complete pattern with gradient overlays
+- Toggle "Pentatonic Scale" to overlay major/minor pentatonic scale notes in green
 - Toggle "All Notes" to display natural note names on fret positions for easy navigation
 - Click on any colored circle in the progress indicator to jump to that shape
 

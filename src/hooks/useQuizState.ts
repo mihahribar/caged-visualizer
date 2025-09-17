@@ -1,5 +1,6 @@
 import { useReducer } from 'react';
 import type { QuizSession, QuizQuestion, QuizAnswer, QuizConfig } from '../types';
+import { DEFAULT_QUIZ_CONFIG } from '../constants/quizConfig';
 
 type QuizAction =
   | { type: 'START_QUIZ'; payload: { questions: QuizQuestion[]; config: QuizConfig } }
@@ -68,12 +69,8 @@ const initialState: QuizSession = {
   isCompleted: false,
 };
 
-// Default quiz configuration
-const defaultConfig: QuizConfig = {
-  questionCount: 5,
-  allowedChords: ['C', 'A', 'G', 'E', 'D'],
-  allowedShapes: ['C', 'A', 'G', 'E', 'D'],
-};
+// Use centralized default configuration
+const defaultConfig: QuizConfig = DEFAULT_QUIZ_CONFIG;
 
 export function useQuizState() {
   const [state, dispatch] = useReducer(quizReducer, initialState);
