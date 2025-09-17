@@ -6,11 +6,22 @@ export interface CAGEDShape {
   rootNotes: number[];
 }
 
+export interface CAGEDShapeWithQuality extends CAGEDShape {
+  quality: ChordQuality;
+}
+
 export interface CAGEDShapeData {
   [key: string]: CAGEDShape;
 }
 
+export interface CAGEDShapesByQuality {
+  major: CAGEDShapeData;
+  minor: CAGEDShapeData;
+}
+
 export type ChordType = 'C' | 'A' | 'G' | 'E' | 'D';
+
+export type ChordQuality = 'major' | 'minor';
 
 export interface ChromaticValues {
   [key: string]: number;
@@ -27,6 +38,7 @@ export interface QuizQuestion {
   position: number;
   choices: ChordType[];
   correctAnswer: ChordType;
+  quality?: ChordQuality;
 }
 
 export interface QuizAnswer {
