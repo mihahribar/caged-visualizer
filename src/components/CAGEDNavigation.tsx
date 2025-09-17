@@ -83,7 +83,7 @@ export default function CAGEDNavigation({
               </button>
 
               {/* Shape Position Selector */}
-              <div className="flex gap-1.5 ml-2" role="tablist" aria-label="CAGED shape selector">
+              <div className="flex gap-1.5" role="tablist" aria-label="CAGED shape selector">
                 {cagedSequence.map((shape, index) => (
                   <button
                     key={shape}
