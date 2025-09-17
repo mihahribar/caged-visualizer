@@ -5,7 +5,6 @@ import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
 import CAGEDNavigation from './CAGEDNavigation.tsx';
 import ViewModeToggles from './ViewModeToggles';
 import FretboardDisplay from './FretboardDisplay';
-import ChordQualityToggle from './ChordQualityToggle';
 import {
   CAGED_SHAPES_BY_QUALITY
 } from '../constants';
@@ -93,18 +92,11 @@ const CAGEDVisualizer = () => {
         cagedSequence={cagedSequence}
         showAllShapes={showAllShapes}
         onChordChange={actions.setChord}
+        onChordQualityChange={actions.setChordQuality}
         onPreviousPosition={previousPosition}
         onNextPosition={nextPosition}
         onSetPosition={actions.setPosition}
       />
-
-      {/* Chord Quality Toggle */}
-      <div className="flex justify-center mb-6">
-        <ChordQualityToggle
-          chordQuality={chordQuality}
-          onToggle={actions.setChordQuality}
-        />
-      </div>
 
       <FretboardDisplay
         selectedChord={selectedChord}
