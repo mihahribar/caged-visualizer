@@ -1,8 +1,9 @@
-import type { ChordType } from '../types';
-import { CAGED_SHAPE_DATA } from '../constants';
+import type { ChordType, ChordQuality } from '../types';
+import { CAGED_SHAPES_BY_QUALITY } from '../constants';
 
 interface ConsolidatedNavigationProps {
   selectedChord: ChordType;
+  chordQuality: ChordQuality;
   currentPosition: number;
   cagedSequence: string[];
   showAllShapes: boolean;
@@ -22,6 +23,7 @@ const chords: { value: ChordType; label: string }[] = [
 
 export default function CAGEDNavigation({
   selectedChord,
+  chordQuality,
   currentPosition,
   cagedSequence,
   showAllShapes,
@@ -48,7 +50,7 @@ export default function CAGEDNavigation({
               onChange={(e) => onChordChange(e.target.value as ChordType)}
               className="appearance-none rounded-lg px-4 py-2 pr-8 text-white font-medium focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:outline-none cursor-pointer border-none shadow-md transition-all duration-200"
               style={{
-                backgroundColor: CAGED_SHAPE_DATA[selectedChord].color
+                backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][selectedChord].color
               }}
               aria-label="Select root chord"
             >
@@ -93,7 +95,7 @@ export default function CAGEDNavigation({
                         ? 'scale-110 shadow-lg focus:ring-white ring-2 ring-white ring-opacity-30'
                         : 'opacity-50 hover:opacity-75 focus:ring-gray-400'
                     }`}
-                    style={{ backgroundColor: CAGED_SHAPE_DATA[shape].color }}
+                    style={{ backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][shape].color }}
                     role="tab"
                     aria-selected={index === currentPosition}
                     aria-label={`${shape} shape position ${index + 1} of ${cagedSequence.length}`}
