@@ -23,6 +23,8 @@ export type ChordType = 'C' | 'A' | 'G' | 'E' | 'D';
 
 export type ChordQuality = 'major' | 'minor';
 
+export type QuizMode = 'major' | 'minor' | 'mixed';
+
 export interface ChromaticValues {
   [key: string]: number;
 }
@@ -38,7 +40,7 @@ export interface QuizQuestion {
   position: number;
   choices: ChordType[];
   correctAnswer: ChordType;
-  quality?: ChordQuality;
+  quality: ChordQuality;
 }
 
 export interface QuizAnswer {
@@ -60,6 +62,14 @@ export interface QuizSession {
 }
 
 export interface QuizConfig {
+  questionCount: number;
+  allowedChords: ChordType[];
+  allowedShapes: ChordType[];
+  quizMode: QuizMode;
+}
+
+export interface QuizPreferences {
+  quizMode: QuizMode;
   questionCount: number;
   allowedChords: ChordType[];
   allowedShapes: ChordType[];

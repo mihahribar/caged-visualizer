@@ -1,10 +1,11 @@
-import type { QuizConfig, ChordType } from '../types';
+import type { QuizConfig, ChordType, QuizMode } from '../types';
 
-// Default quiz configuration (as specified: 5 questions, configurable in code)
+// Default quiz configuration (updated to 10 questions with chord quality support)
 export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
-  questionCount: 5,
+  questionCount: 10,
   allowedChords: ['C', 'A', 'G', 'E', 'D'],
   allowedShapes: ['C', 'A', 'G', 'E', 'D'],
+  quizMode: 'mixed',
 };
 
 // Additional quiz configurations for future extensibility
@@ -13,16 +14,19 @@ export const QUIZ_PRESETS = {
     questionCount: 5,
     allowedChords: ['C', 'G', 'D'] as ChordType[],
     allowedShapes: ['C', 'G', 'D'] as ChordType[],
+    quizMode: 'major' as QuizMode,
   },
   intermediate: {
-    questionCount: 5,
+    questionCount: 10,
     allowedChords: ['C', 'A', 'G', 'E', 'D'] as ChordType[],
     allowedShapes: ['C', 'A', 'G', 'E', 'D'] as ChordType[],
+    quizMode: 'mixed' as QuizMode,
   },
   advanced: {
     questionCount: 10,
     allowedChords: ['C', 'A', 'G', 'E', 'D'] as ChordType[],
     allowedShapes: ['C', 'A', 'G', 'E', 'D'] as ChordType[],
+    quizMode: 'mixed' as QuizMode,
   },
 } as const;
 
@@ -37,9 +41,10 @@ export function validateQuizConfig(config: QuizConfig): boolean {
   );
 }
 
-// Get quiz configuration (currently returns default, but configurable in code)
-export function getQuizConfig(): QuizConfig {
-  // For now, return the default config
-  // This can be modified to support different difficulty levels or user preferences
-  return DEFAULT_QUIZ_CONFIG;
+// Get quiz configuration (returns default, can be overridden with user preferences)
+export function getQuizConfig(userConfig?: Partial<QuizConfig>): QuizConfig {
+  return {
+    ...DEFAULT_QUIZ_CONFIG,
+    ...userConfig,
+  };
 }

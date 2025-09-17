@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { QuizQuestion as QuizQuestionType, ChordType } from '../types';
-import { CAGED_SHAPE_DATA, STRING_NAMES, TOTAL_FRETS } from '../constants';
+import { CAGED_SHAPES_BY_QUALITY, STRING_NAMES, TOTAL_FRETS } from '../constants';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -24,21 +24,26 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
     }, 1200);
   };
 
+  // Get the correct shape data based on chord quality
+  const getShapeData = () => {
+    return CAGED_SHAPES_BY_QUALITY[question.quality][question.shapeUsed];
+  };
+
   // Calculate which frets should show dots for this question
   const shouldShowDot = (stringIndex: number, fretNumber: number): boolean => {
-    const shape = CAGED_SHAPE_DATA[question.shapeUsed];
+    const shape = getShapeData();
     const patternFret = shape.pattern[stringIndex];
     const basePosition = question.position;
-    
+
     if (patternFret === -1) return false; // Not played
     if (patternFret === 0 && basePosition === 0) return fretNumber === 0; // Open string
     if (patternFret === 0 && basePosition > 0) return fretNumber === basePosition; // Barre
-    
+
     return fretNumber === patternFret + basePosition;
   };
 
   const getDotStyle = (): React.CSSProperties => {
-    return { backgroundColor: CAGED_SHAPE_DATA[question.shapeUsed].color };
+    return { backgroundColor: getShapeData().color };
   };
 
   const isCorrectAnswer = selectedAnswer === question.correctAnswer;
@@ -51,7 +56,7 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
           Question {question.id}
         </h2>
         <p className="text-gray-600 dark:text-gray-300 text-lg">
-          What chord is being played using the <span className="font-medium">{question.shapeUsed} shape</span> at position {question.position}?
+          What <span className="font-medium">{question.quality}</span> chord is being played using the <span className="font-medium">{question.shapeUsed} shape</span> at position {question.position}?
         </p>
       </div>
 
@@ -144,12 +149,12 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
                 }
               `}
               style={{
-                backgroundColor: CAGED_SHAPE_DATA[choice].color
+                backgroundColor: CAGED_SHAPES_BY_QUALITY[question.quality][choice].color
               }}
-              aria-label={`Select ${choice} Major`}
+              aria-label={`Select ${choice} ${question.quality}`}
               aria-pressed={selectedAnswer === choice}
             >
-              {choice} Major
+              {choice} {question.quality === 'major' ? 'Major' : 'Minor'}
             </button>
           ))}
         </div>
@@ -167,7 +172,10 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
         {/* Feedback */}
         {showFeedback && (
           <div className={`text-lg font-medium ${isCorrectAnswer ? 'text-green-600' : 'text-red-600'}`}>
-            {isCorrectAnswer ? '✓ Correct!' : `✗ Incorrect. The answer was ${question.correctAnswer} Major`}
+            {isCorrectAnswer
+              ? '✓ Correct!'
+              : `✗ Incorrect. The answer was ${question.correctAnswer} ${question.quality === 'major' ? 'Major' : 'Minor'}`
+            }
           </div>
         )}
       </div>
