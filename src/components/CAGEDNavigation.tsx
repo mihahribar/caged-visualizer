@@ -1,31 +1,36 @@
-import type { ChordType } from '../types';
-import { CAGED_SHAPE_DATA } from '../constants';
+import type { ChordType, ChordQuality } from '../types';
+import { CAGED_SHAPES_BY_QUALITY } from '../constants';
+import ChordQualityToggle from './ChordQualityToggle';
 
 interface ConsolidatedNavigationProps {
   selectedChord: ChordType;
+  chordQuality: ChordQuality;
   currentPosition: number;
   cagedSequence: string[];
   showAllShapes: boolean;
   onChordChange: (chord: ChordType) => void;
+  onChordQualityChange: (quality: ChordQuality) => void;
   onPreviousPosition: () => void;
   onNextPosition: () => void;
   onSetPosition: (position: number) => void;
 }
 
 const chords: { value: ChordType; label: string }[] = [
-  { value: 'C', label: 'C Major' },
-  { value: 'A', label: 'A Major' },
-  { value: 'G', label: 'G Major' },
-  { value: 'E', label: 'E Major' },
-  { value: 'D', label: 'D Major' }
+  { value: 'C', label: 'C' },
+  { value: 'A', label: 'A' },
+  { value: 'G', label: 'G' },
+  { value: 'E', label: 'E' },
+  { value: 'D', label: 'D' }
 ];
 
 export default function CAGEDNavigation({
   selectedChord,
+  chordQuality,
   currentPosition,
   cagedSequence,
   showAllShapes,
   onChordChange,
+  onChordQualityChange,
   onPreviousPosition,
   onNextPosition,
   onSetPosition
@@ -35,33 +40,44 @@ export default function CAGEDNavigation({
     <div className="bg-white dark:bg-gray-900 mb-6">
       <div className="flex flex-col gap-6">
 
-        {/* Root Chord Selection - Centered at top */}
+        {/* Root Chord and Quality Selection - Centered at top */}
         <div className="flex flex-col items-center">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-sm font-medium text-gray-800 dark:text-gray-100">
-              Root Chord
-            </h3>
-          </div>
-          <div className="relative">
-            <select
-              value={selectedChord}
-              onChange={(e) => onChordChange(e.target.value as ChordType)}
-              className="appearance-none rounded-lg px-4 py-2 pr-8 text-white font-medium focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:outline-none cursor-pointer border-none shadow-md transition-all duration-200"
-              style={{
-                backgroundColor: CAGED_SHAPE_DATA[selectedChord].color
-              }}
-              aria-label="Select root chord"
-            >
-              {chords.map(({ value, label }) => (
-                <option key={value} value={value} className="bg-gray-800 text-white">
-                  {label}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-              <svg className="w-4 h-4 text-white text-opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+          {/* Horizontal layout for chord and quality selectors */}
+          <div className="flex items-center gap-6">
+            {/* Root Chord Selector */}
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-xs text-gray-600 dark:text-gray-400">Root</span>
+              <div className="relative">
+                <select
+                  value={selectedChord}
+                  onChange={(e) => onChordChange(e.target.value as ChordType)}
+                  className="appearance-none rounded-lg px-4 py-2 pr-8 text-white font-medium focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:outline-none cursor-pointer border-none shadow-md transition-all duration-200"
+                  style={{
+                    backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][selectedChord].color
+                  }}
+                  aria-label="Select root chord"
+                >
+                  {chords.map(({ value, label }) => (
+                    <option key={value} value={value} className="bg-gray-800 text-white">
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <svg className="w-4 h-4 text-white text-opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Chord Quality Toggle */}
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-xs text-gray-600 dark:text-gray-400">Quality</span>
+              <ChordQualityToggle
+                chordQuality={chordQuality}
+                onToggle={onChordQualityChange}
+              />
             </div>
           </div>
         </div>
@@ -93,7 +109,7 @@ export default function CAGEDNavigation({
                         ? 'scale-110 shadow-lg focus:ring-white ring-2 ring-white ring-opacity-30'
                         : 'opacity-50 hover:opacity-75 focus:ring-gray-400'
                     }`}
-                    style={{ backgroundColor: CAGED_SHAPE_DATA[shape].color }}
+                    style={{ backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][shape].color }}
                     role="tab"
                     aria-selected={index === currentPosition}
                     aria-label={`${shape} shape position ${index + 1} of ${cagedSequence.length}`}

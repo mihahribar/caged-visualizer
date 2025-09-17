@@ -1,8 +1,9 @@
 import { useReducer } from 'react';
-import type { ChordType } from '../types';
+import type { ChordType, ChordQuality } from '../types';
 
 interface CAGEDState {
   selectedChord: ChordType;
+  chordQuality: ChordQuality;
   currentPosition: number;
   showAllShapes: boolean;
   showPentatonic: boolean;
@@ -11,6 +12,7 @@ interface CAGEDState {
 
 type CAGEDAction =
   | { type: 'SET_CHORD'; payload: ChordType }
+  | { type: 'SET_CHORD_QUALITY'; payload: ChordQuality }
   | { type: 'NEXT_POSITION'; payload: { sequenceLength: number } }
   | { type: 'PREVIOUS_POSITION'; payload: { sequenceLength: number } }
   | { type: 'SET_POSITION'; payload: number }
@@ -25,6 +27,12 @@ function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
         ...state,
         selectedChord: action.payload,
         currentPosition: 0, // Reset to first position when changing chord
+      };
+    case 'SET_CHORD_QUALITY':
+      return {
+        ...state,
+        chordQuality: action.payload,
+        currentPosition: 0, // Reset to first position when changing quality
       };
     case 'NEXT_POSITION':
       return {
@@ -63,6 +71,7 @@ function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
 
 const initialState: CAGEDState = {
   selectedChord: 'C',
+  chordQuality: 'major',
   currentPosition: 0,
   showAllShapes: false,
   showPentatonic: false,
@@ -74,6 +83,7 @@ export function useCAGEDState() {
   
   const actions = {
     setChord: (chord: ChordType) => dispatch({ type: 'SET_CHORD', payload: chord }),
+    setChordQuality: (quality: ChordQuality) => dispatch({ type: 'SET_CHORD_QUALITY', payload: quality }),
     nextPosition: (sequenceLength: number) => dispatch({ type: 'NEXT_POSITION', payload: { sequenceLength } }),
     previousPosition: (sequenceLength: number) => dispatch({ type: 'PREVIOUS_POSITION', payload: { sequenceLength } }),
     setPosition: (position: number) => dispatch({ type: 'SET_POSITION', payload: position }),

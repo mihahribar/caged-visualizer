@@ -1,7 +1,8 @@
-import type { ChordType } from '../types';
+import type { ChordType, ChordQuality } from '../types';
 
 interface ViewModeTogglesProps {
   selectedChord: ChordType;
+  chordQuality: ChordQuality;
   showAllShapes: boolean;
   showPentatonic: boolean;
   showAllNotes: boolean;
@@ -12,6 +13,7 @@ interface ViewModeTogglesProps {
 
 export default function ViewModeToggles({
   selectedChord,
+  chordQuality,
   showAllShapes,
   showPentatonic,
   showAllNotes,
@@ -110,8 +112,8 @@ export default function ViewModeToggles({
           </p>
           <p>
             {showAllShapes
-              ? `Viewing all 5 CAGED positions for ${selectedChord} major simultaneously`
-              : `Navigate through different ways to play ${selectedChord} major using CAGED shapes`
+              ? `Viewing all 5 CAGED positions for ${selectedChord} ${chordQuality} simultaneously`
+              : `Navigate through different ways to play ${selectedChord} ${chordQuality} using CAGED shapes`
             }
           </p>
           <p className="text-xs">
@@ -125,7 +127,7 @@ export default function ViewModeToggles({
         {showPentatonic && (
           <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
             <p className="font-medium text-green-600 dark:text-green-400 text-sm">
-              {selectedChord} Major Pentatonic Scale Active
+              {selectedChord} {chordQuality === 'major' ? 'Major' : 'Minor'} Pentatonic Scale Active
             </p>
             <p className="text-xs">
               Green dots: scale notes • Green rings: chord + scale overlap

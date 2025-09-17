@@ -6,16 +6,16 @@ import CAGEDNavigation from './CAGEDNavigation.tsx';
 import ViewModeToggles from './ViewModeToggles';
 import FretboardDisplay from './FretboardDisplay';
 import {
-  CAGED_SHAPE_DATA
+  CAGED_SHAPES_BY_QUALITY
 } from '../constants';
 
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
-  const { selectedChord, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
+  const { selectedChord, chordQuality, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
-  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote, getNoteNameAtFret, shouldShowNoteName } = useCAGEDLogic(selectedChord, cagedSequence);
+  const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote, getNoteNameAtFret, shouldShowNoteName } = useCAGEDLogic(selectedChord, chordQuality, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
 
@@ -37,7 +37,7 @@ const CAGEDVisualizer = () => {
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
       return createGradientStyle(shapesHere);
     } else {
-      return { backgroundColor: CAGED_SHAPE_DATA[currentShape].color };
+      return { backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape].color };
     }
   };
 
@@ -47,12 +47,12 @@ const CAGEDVisualizer = () => {
       // When showing all shapes, check if any shape has a root note at this position
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
       return shapesHere.some(shapeKey => {
-        const shape = CAGED_SHAPE_DATA[shapeKey];
+        const shape = CAGED_SHAPES_BY_QUALITY[chordQuality][shapeKey];
         return shape.rootNotes.includes(stringIndex);
       });
     } else {
       // For single shape view, check if current shape has root note here
-      const shape = CAGED_SHAPE_DATA[currentShape];
+      const shape = CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape];
       return shape.rootNotes.includes(stringIndex) && shouldShowDot(stringIndex, fretNumber);
     }
   };
@@ -87,10 +87,12 @@ const CAGEDVisualizer = () => {
 
       <CAGEDNavigation
         selectedChord={selectedChord}
+        chordQuality={chordQuality}
         currentPosition={currentPosition}
         cagedSequence={cagedSequence}
         showAllShapes={showAllShapes}
         onChordChange={actions.setChord}
+        onChordQualityChange={actions.setChordQuality}
         onPreviousPosition={previousPosition}
         onNextPosition={nextPosition}
         onSetPosition={actions.setPosition}
@@ -112,6 +114,7 @@ const CAGEDVisualizer = () => {
 
       <ViewModeToggles
         selectedChord={selectedChord}
+        chordQuality={chordQuality}
         showAllShapes={showAllShapes}
         showPentatonic={showPentatonic}
         showAllNotes={showAllNotes}
