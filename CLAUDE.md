@@ -27,20 +27,32 @@ src/
 ├── components/                 # React components
 │   ├── CAGEDVisualizer.tsx    # Main visualizer component
 │   ├── QuizPage.tsx           # Quiz mode entry point
-│   ├── QuizQuestion.tsx       # Individual quiz questions
 │   ├── QuizResults.tsx        # Quiz completion screen
 │   ├── AppNavigation.tsx      # Top navigation bar
-│   ├── ThemeToggle.tsx        # Dark/light mode toggle
 │   ├── FretboardDisplay.tsx   # Guitar fretboard renderer
-│   └── ...                    # Supporting UI components
+│   ├── CAGEDNavigation.tsx    # CAGED shape navigation
+│   ├── ChordQualityToggle.tsx # Major/minor toggle
+│   ├── ShowAllToggle.tsx      # Show all shapes toggle
+│   ├── AllNotesToggle.tsx     # All notes display toggle
+│   ├── QuizModeToggle.tsx     # Quiz mode navigation
+│   └── ...                    # Additional UI components
 ├── hooks/                     # Custom React hooks
 │   ├── useCAGEDLogic.ts      # Core CAGED calculation logic
 │   ├── useCAGEDState.ts      # Visualizer state management
+│   ├── useCAGEDSequence.ts   # CAGED shape sequencing
 │   ├── useQuiz.ts            # Quiz state management
+│   ├── useQuizLogic.ts       # Quiz question generation
+│   ├── useQuizState.ts       # Quiz state handling
+│   ├── useQuizPreferences.ts # Quiz preferences
+│   ├── useKeyboardNavigation.ts # Keyboard shortcuts
+│   ├── useTheme.ts           # Theme management
+│   ├── useNavigation.ts      # App navigation
 │   └── ...                    # Additional hooks
 ├── contexts/                  # React contexts
 │   ├── ThemeContext.tsx      # Dark/light theme management
-│   └── NavigationContext.tsx # App navigation state
+│   ├── theme.ts              # Theme type definitions
+│   ├── NavigationContext.tsx # App navigation state
+│   └── NavigationContextCore.ts # Navigation core logic
 ├── constants/                 # Static data and configuration
 │   ├── index.ts              # CAGED system data/patterns
 │   └── quizConfig.ts         # Quiz generation settings

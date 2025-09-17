@@ -25,7 +25,7 @@ An interactive web application for learning the CAGED guitar system.
    ```
 4. Start the development server:
    ```bash
-   npm start dev
+   npm run dev
    ```
 5. Open your browser and go to `http://localhost:5173`
 
