@@ -51,8 +51,8 @@ export const CAGED_MINOR_SHAPE_DATA: CAGEDShapeData = {
   C: {
     name: 'Cm Shape',
     color: '#FF6B6B',
-    pattern: [0, 1, 0, 1, 3, -1],
-    fingers: [0, 2, 0, 1, 4, -1],
+    pattern: [-1, 1, 0, 1, 3, -1],
+    fingers: [-1, 2, 0, 1, 4, -1],
     rootNotes: [4]
   },
   A: {
@@ -65,8 +65,8 @@ export const CAGED_MINOR_SHAPE_DATA: CAGEDShapeData = {
   G: {
     name: 'Gm Shape',
     color: '#45B7D1',
-    pattern: [3, 0, 0, 3, 2, 3],
-    fingers: [4, -1, 0, 3, 1, 2],
+    pattern: [3, -1, 0, 0, 1, 3],
+    fingers: [4, -1, 0, 0, 1, 3],
     rootNotes: [0, 5]
   },
   E: {
