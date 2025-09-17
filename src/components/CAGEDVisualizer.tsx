@@ -5,13 +5,14 @@ import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
 import CAGEDNavigation from './CAGEDNavigation.tsx';
 import ViewModeToggles from './ViewModeToggles';
 import FretboardDisplay from './FretboardDisplay';
+import ChordQualityToggle from './ChordQualityToggle';
 import {
   CAGED_SHAPE_DATA
 } from '../constants';
 
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
-  const { selectedChord, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
+  const { selectedChord, chordQuality, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
   // Use custom hooks for logic
   const cagedSequence = useCAGEDSequence(selectedChord);
@@ -96,6 +97,14 @@ const CAGEDVisualizer = () => {
         onSetPosition={actions.setPosition}
       />
 
+      {/* Chord Quality Toggle */}
+      <div className="flex justify-center mb-6">
+        <ChordQualityToggle
+          chordQuality={chordQuality}
+          onToggle={actions.setChordQuality}
+        />
+      </div>
+
       <FretboardDisplay
         selectedChord={selectedChord}
         currentShape={currentShape}
@@ -112,6 +121,7 @@ const CAGEDVisualizer = () => {
 
       <ViewModeToggles
         selectedChord={selectedChord}
+        chordQuality={chordQuality}
         showAllShapes={showAllShapes}
         showPentatonic={showPentatonic}
         showAllNotes={showAllNotes}
