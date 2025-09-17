@@ -2,7 +2,7 @@ import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
-import ConsolidatedNavigation from './ConsolidatedNavigation';
+import CAGEDNavigation from './CAGEDNavigation.tsx';
 import ViewModeToggles from './ViewModeToggles';
 import FretboardDisplay from './FretboardDisplay';
 import {
@@ -85,7 +85,7 @@ const CAGEDVisualizer = () => {
   return (
     <div className="max-w-6xl mx-auto p-8">
 
-      <ConsolidatedNavigation
+      <CAGEDNavigation
         selectedChord={selectedChord}
         currentPosition={currentPosition}
         cagedSequence={cagedSequence}
