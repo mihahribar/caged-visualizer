@@ -1,12 +1,10 @@
 import { useQuiz } from '../hooks/useQuiz';
-import { useNavigation } from '../hooks/useNavigation';
 import QuizQuestion from './QuizQuestion';
 import QuizResults from './QuizResults';
 import QuizProgress from './QuizProgress';
 import QuizModeToggle from './QuizModeToggle';
 
 export default function QuizPage() {
-  const { navigateTo } = useNavigation();
   const {
     isIdle,
     isActive,
@@ -16,15 +14,9 @@ export default function QuizPage() {
     preferences,
     startNewQuiz,
     submitAnswer,
-    resetQuiz,
     getResults,
     updateQuizMode,
   } = useQuiz();
-
-  const handleBackToVisualizer = () => {
-    resetQuiz();
-    navigateTo('visualizer');
-  };
 
   if (isIdle) {
     return (
@@ -50,18 +42,12 @@ export default function QuizPage() {
             />
           </div>
 
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center">
             <button
               onClick={startNewQuiz}
               className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
             >
               Start Quiz
-            </button>
-            <button
-              onClick={handleBackToVisualizer}
-              className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200 text-lg cursor-pointer"
-            >
-              Back to Visualizer
             </button>
           </div>
         </div>
@@ -95,7 +81,6 @@ export default function QuizPage() {
         <QuizResults
           results={results}
           onStartNewQuiz={startNewQuiz}
-          onBackToVisualizer={handleBackToVisualizer}
         />
       </div>
     );
