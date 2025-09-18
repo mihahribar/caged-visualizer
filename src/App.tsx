@@ -1,9 +1,13 @@
+import { lazy, Suspense } from "react";
 import CAGEDVisualizer from "./components/CAGEDVisualizer";
-import QuizPage from "./components/QuizPage";
 import AppNavigation from "./components/AppNavigation";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { NavigationProvider } from "./contexts/NavigationContext";
 import { useNavigation } from "./hooks/useNavigation";
+import { LoadingFallback } from "./components/LoadingFallback";
+
+// Lazy load Quiz components for better initial bundle size
+const QuizPage = lazy(() => import("./components/QuizPage"));
 
 function AppContent() {
   const { currentPage } = useNavigation();
@@ -18,7 +22,11 @@ function AppContent() {
       {/* Main Content */}
       <main>
         {currentPage === 'visualizer' && <CAGEDVisualizer />}
-        {currentPage === 'quiz' && <QuizPage />}
+        {currentPage === 'quiz' && (
+          <Suspense fallback={<LoadingFallback message="Loading quiz..." size="large" />}>
+            <QuizPage />
+          </Suspense>
+        )}
       </main>
     </div>
   );

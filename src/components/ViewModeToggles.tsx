@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { ChordType, ChordQuality } from '../types';
 
 interface ViewModeTogglesProps {
@@ -11,7 +12,7 @@ interface ViewModeTogglesProps {
   onToggleShowAllNotes: () => void;
 }
 
-export default function ViewModeToggles({
+function ViewModeToggles({
   selectedChord,
   chordQuality,
   showAllShapes,
@@ -149,3 +150,5 @@ export default function ViewModeToggles({
     </div>
   );
 }
+
+export default memo(ViewModeToggles);

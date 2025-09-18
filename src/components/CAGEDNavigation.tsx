@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type { ChordType, ChordQuality } from '../types';
 import { CAGED_SHAPES_BY_QUALITY } from '../constants';
 import ChordQualityToggle from './ChordQualityToggle';
@@ -23,7 +24,7 @@ const chords: { value: ChordType; label: string }[] = [
   { value: 'D', label: 'D' }
 ];
 
-export default function CAGEDNavigation({
+function CAGEDNavigation({
   selectedChord,
   chordQuality,
   currentPosition,
@@ -157,3 +158,5 @@ export default function CAGEDNavigation({
     </div>
   );
 }
+
+export default memo(CAGEDNavigation);

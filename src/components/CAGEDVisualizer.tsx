@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
@@ -52,7 +53,7 @@ export default function CAGEDVisualizer() {
 
 
   // Check if a dot should be shown at this position
-  const shouldShowDot = (stringIndex: number, fretNumber: number) => {
+  const shouldShowDot = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       return getShapesAtPosition(stringIndex, fretNumber).length > 0;
     } else {
@@ -61,20 +62,20 @@ export default function CAGEDVisualizer() {
       const shapeFret = getShapeFret(currentShape, stringIndex, basePosition);
       return shapeFret === fretNumber && shapeFret > 0;
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, shapePositions, currentShape, getShapeFret]);
 
   // Get color/style for a dot at this position
-  const getDotStyle = (stringIndex: number, fretNumber: number) => {
+  const getDotStyle = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
       return createGradientStyle(shapesHere);
     } else {
       return { backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape].color };
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, createGradientStyle, chordQuality, currentShape]);
 
   // Check if this is a root note for the current shape
-  const isRootNote = (stringIndex: number, fretNumber: number) => {
+  const isRootNote = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       // When showing all shapes, check if any shape has a root note at this position
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
@@ -87,20 +88,20 @@ export default function CAGEDVisualizer() {
       const shape = CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape];
       return shape.rootNotes.includes(stringIndex) && shouldShowDot(stringIndex, fretNumber);
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, chordQuality, currentShape, shouldShowDot]);
 
   // Check if a pentatonic dot should be shown at this position
-  const shouldShowPentatonicDot = (stringIndex: number, fretNumber: number) => {
+  const shouldShowPentatonicDot = useCallback((stringIndex: number, fretNumber: number) => {
     return isPentatonicNote(stringIndex, fretNumber);
-  };
+  }, [isPentatonicNote]);
 
-  const nextPosition = () => {
+  const nextPosition = useCallback(() => {
     actions.nextPosition(cagedSequence.length);
-  };
+  }, [actions, cagedSequence.length]);
 
-  const previousPosition = () => {
+  const previousPosition = useCallback(() => {
     actions.previousPosition(cagedSequence.length);
-  };
+  }, [actions, cagedSequence.length]);
 
   // Add keyboard navigation
   useKeyboardNavigation({

@@ -77,7 +77,7 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
    * @param basePosition - Base fret position for this shape
    * @returns Fret number to play, or -1 if string not played
    */
-  const getShapeFret = (shapeKey: string, stringIndex: number, basePosition: number) => {
+  const getShapeFret = useMemo(() => (shapeKey: string, stringIndex: number, basePosition: number) => {
     const shape = shapeData[shapeKey];
     const patternFret = shape.pattern[stringIndex]; // Relative fret from shape pattern
 
@@ -88,9 +88,9 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
 
     // Standard case: add pattern offset to base position
     return patternFret + basePosition;
-  };
+  }, [shapeData]);
 
-  const getShapesAtPosition = (stringIndex: number, fretNumber: number) => {
+  const getShapesAtPosition = useMemo(() => (stringIndex: number, fretNumber: number) => {
     const shapesHere: string[] = [];
     for (const shapeKey of cagedSequence) {
       const basePosition = shapePositions[shapeKey];
@@ -100,14 +100,14 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
       }
     }
     return shapesHere;
-  };
+  }, [cagedSequence, shapePositions, getShapeFret]);
 
   /**
    * Generate CSS styling for overlapping CAGED shapes using gradients
    * @param shapes - Array of shape keys that overlap at this position
    * @returns CSS style object with appropriate background
    */
-  const createGradientStyle = (shapes: string[]) => {
+  const createGradientStyle = useMemo(() => (shapes: string[]) => {
     // Single shape: solid color background
     if (shapes.length === 1) {
       return { backgroundColor: shapeData[shapes[0]].color };
@@ -131,7 +131,7 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
         background: `linear-gradient(90deg, ${gradientStops})`
       };
     }
-  };
+  }, [shapeData]);
 
   /**
    * Get the chromatic note value at a specific string and fret position
@@ -183,10 +183,10 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
    * @param fretNumber - Fret number (0 = open, 1 = first fret, etc.)
    * @returns Note name string with sharp/flat notation
    */
-  const getNoteNameAtFret = (stringIndex: number, fretNumber: number): string => {
+  const getNoteNameAtFret = useMemo(() => (stringIndex: number, fretNumber: number): string => {
     const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
     return CHROMATIC_TO_NOTE_NAME[chromaticValue];
-  };
+  }, []);
 
   /**
    * Check if a note should be displayed in "all notes" mode
@@ -195,11 +195,11 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
    * @param fretNumber - Fret number
    * @returns True if note should be shown (natural notes only)
    */
-  const shouldShowNoteName = (stringIndex: number, fretNumber: number): boolean => {
+  const shouldShowNoteName = useMemo(() => (stringIndex: number, fretNumber: number): boolean => {
     const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
     // Filter to only natural notes (exclude sharps/flats for cleaner display)
     return NATURAL_NOTE_POSITIONS.includes(chromaticValue as typeof NATURAL_NOTE_POSITIONS[number]);
-  };
+  }, []);
 
   return {
     shapePositions,

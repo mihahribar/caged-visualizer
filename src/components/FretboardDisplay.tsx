@@ -1,5 +1,7 @@
+import { memo, useEffect } from 'react';
 import type { ChordType } from '../types';
 import { STRING_NAMES, TOTAL_FRETS } from '../constants';
+import { usePerformanceMonitor } from '../utils/performanceMonitor';
 
 /**
  * Props interface for FretboardDisplay component
@@ -57,7 +59,7 @@ interface FretboardDisplayProps {
  * - Minimal DOM updates through conditional rendering of overlays
  * - Efficient iteration over fixed fretboard dimensions (6 strings × 15 frets)
  */
-export default function FretboardDisplay({
+function FretboardDisplay({
   selectedChord,
   showAllShapes,
   showPentatonic,
@@ -69,6 +71,12 @@ export default function FretboardDisplay({
   shouldShowNoteName,
   getNoteNameAtFret
 }: FretboardDisplayProps) {
+  const { startRender } = usePerformanceMonitor('FretboardDisplay');
+
+  useEffect(() => {
+    const endRender = startRender();
+    endRender();
+  });
   return (
     <section className="bg-amber-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm" aria-label="Guitar fretboard">
       <table 
@@ -156,3 +164,7 @@ export default function FretboardDisplay({
     </section>
   );
 }
+
+// Memoize FretboardDisplay to prevent unnecessary re-renders when props haven't changed
+// This is especially important since the component renders 90 cells (6 strings × 15 frets)
+export default memo(FretboardDisplay);
