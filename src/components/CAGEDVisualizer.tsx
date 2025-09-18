@@ -41,7 +41,7 @@ import {
  * - Root note identification and highlighting
  * - Gradient blending for overlapping shapes
  */
-const CAGEDVisualizer = () => {
+export default function CAGEDVisualizer() {
   const { state, actions } = useCAGEDState();
   const { selectedChord, chordQuality, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
@@ -156,6 +156,4 @@ const CAGEDVisualizer = () => {
       />
     </div>
   );
-};
-
-export default CAGEDVisualizer;
+}

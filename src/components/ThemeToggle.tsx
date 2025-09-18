@@ -1,6 +1,6 @@
 import { useTheme } from '../hooks/useTheme';
 
-const ThemeToggle = () => {
+export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -42,6 +42,4 @@ const ThemeToggle = () => {
       )}
     </button>
   );
-};
-
-export default ThemeToggle;
+}

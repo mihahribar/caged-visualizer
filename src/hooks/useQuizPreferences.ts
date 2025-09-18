@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { QuizPreferences, QuizMode, ChordType, ValidationResult, ValidationError } from '../types';
 import { DEFAULT_QUIZ_CONFIG } from '../constants/quizConfig';
+import { createStorageError } from '../types/errors';
+import { errorLogger } from '../utils/errorLogger';
 
 const QUIZ_PREFERENCES_KEY = 'caged-quiz-preferences';
 
@@ -54,7 +56,13 @@ export function useQuizPreferences(): {
         savePreferences(DEFAULT_PREFERENCES);
       }
     } catch (error) {
-      console.warn('Failed to load quiz preferences from localStorage:', error);
+      const storageError = createStorageError(
+        'read',
+        'localStorage',
+        QUIZ_PREFERENCES_KEY,
+        error instanceof Error ? error : new Error(String(error))
+      );
+      errorLogger.logError(storageError, 'medium');
       savePreferences(DEFAULT_PREFERENCES);
     } finally {
       setIsLoaded(true);
@@ -67,7 +75,13 @@ export function useQuizPreferences(): {
       localStorage.setItem(QUIZ_PREFERENCES_KEY, JSON.stringify(newPreferences));
       setPreferences(newPreferences);
     } catch (error) {
-      console.error('Failed to save quiz preferences to localStorage:', error);
+      const storageError = createStorageError(
+        'write',
+        'localStorage',
+        QUIZ_PREFERENCES_KEY,
+        error instanceof Error ? error : new Error(String(error))
+      );
+      errorLogger.logError(storageError, 'medium');
     }
   };
 
