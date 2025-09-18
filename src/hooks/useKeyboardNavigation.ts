@@ -11,6 +11,50 @@ interface UseKeyboardNavigationProps {
   onToggleShowAllNotes: () => void;
 }
 
+/**
+ * Custom hook for keyboard navigation and shortcuts in the CAGED visualizer
+ *
+ * Provides keyboard controls for navigating CAGED shapes and toggling display options.
+ * Respects user input context and avoids interfering with form inputs.
+ * Includes accessibility-friendly shortcuts for efficient visualizer operation.
+ *
+ * @param props Configuration object containing:
+ *   - showAllShapes: Whether all shapes are currently displayed
+ *   - cagedSequenceLength: Number of shapes in current sequence
+ *   - onPreviousPosition: Callback to navigate to previous shape
+ *   - onNextPosition: Callback to navigate to next shape
+ *   - onSetPosition: Callback to jump to specific position
+ *   - onToggleShowAllShapes: Callback to toggle all shapes display
+ *   - onToggleShowPentatonic: Callback to toggle pentatonic overlay
+ *   - onToggleShowAllNotes: Callback to toggle all notes display
+ *
+ * @keyboardShortcuts
+ * - Arrow Left/Right: Navigate between CAGED shapes (when not showing all)
+ * - 1-5: Jump directly to CAGED shape position (when not showing all)
+ * - Space: Toggle show all shapes mode
+ * - S: Toggle pentatonic scale overlay
+ * - N: Toggle all notes display
+ *
+ * @accessibility
+ * - Respects form input focus (doesn't interfere with typing)
+ * - Prevents conflicts with browser shortcuts (Ctrl+S, Cmd+N, etc.)
+ * - Uses preventDefault() to avoid unwanted browser behavior
+ * - Provides alternative to mouse interaction for motor accessibility
+ *
+ * @example
+ * ```typescript
+ * useKeyboardNavigation({
+ *   showAllShapes: false,
+ *   cagedSequenceLength: 5,
+ *   onPreviousPosition: () => actions.previousPosition(5),
+ *   onNextPosition: () => actions.nextPosition(5),
+ *   onSetPosition: (pos) => actions.setPosition(pos),
+ *   onToggleShowAllShapes: actions.toggleShowAllShapes,
+ *   onToggleShowPentatonic: actions.toggleShowPentatonic,
+ *   onToggleShowAllNotes: actions.toggleShowAllNotes
+ * });
+ * ```
+ */
 export function useKeyboardNavigation({
   showAllShapes,
   cagedSequenceLength,

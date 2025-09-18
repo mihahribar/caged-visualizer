@@ -78,9 +78,42 @@ const initialState: CAGEDState = {
   showAllNotes: false,
 };
 
+/**
+ * Custom hook for managing CAGED visualizer state using useReducer pattern
+ *
+ * Provides centralized state management for the CAGED chord system visualizer,
+ * including chord selection, quality toggles, position navigation, and display options.
+ * Uses reducer pattern for predictable state updates and complex state logic.
+ *
+ * @returns Object containing:
+ *   - state: Current CAGEDState with all visualizer settings
+ *   - actions: Object with action creator functions for state updates
+ *
+ * @example
+ * ```typescript
+ * const { state, actions } = useCAGEDState();
+ *
+ * // Change chord and reset position
+ * actions.setChord('G');
+ *
+ * // Toggle between major and minor
+ * actions.setChordQuality('minor');
+ *
+ * // Navigate through CAGED sequence
+ * actions.nextPosition(5); // 5 shapes in sequence
+ * ```
+ *
+ * @stateManagement
+ * State updates follow immutable patterns with automatic position resets when
+ * changing chord or quality to maintain consistent user experience.
+ *
+ * @performance
+ * Uses useReducer for complex state logic instead of multiple useState hooks,
+ * reducing re-renders and improving predictability of state changes.
+ */
 export function useCAGEDState() {
   const [state, dispatch] = useReducer(cagedReducer, initialState);
-  
+
   const actions = {
     setChord: (chord: ChordType) => dispatch({ type: 'SET_CHORD', payload: chord }),
     setChordQuality: (quality: ChordQuality) => dispatch({ type: 'SET_CHORD_QUALITY', payload: quality }),
@@ -91,7 +124,7 @@ export function useCAGEDState() {
     toggleShowPentatonic: () => dispatch({ type: 'TOGGLE_SHOW_PENTATONIC' }),
     toggleShowAllNotes: () => dispatch({ type: 'TOGGLE_SHOW_ALL_NOTES' }),
   };
-  
+
   return {
     state,
     actions,

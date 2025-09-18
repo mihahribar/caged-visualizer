@@ -9,11 +9,43 @@ import {
   CAGED_SHAPES_BY_QUALITY
 } from '../constants';
 
+/**
+ * Main CAGED chord system visualizer component
+ *
+ * Orchestrates the complete CAGED visualization experience by combining state management,
+ * music theory calculations, and user interaction. Provides interactive fretboard display
+ * with multiple viewing modes, keyboard navigation, and educational overlays.
+ *
+ * @returns JSX component with complete CAGED visualizer interface
+ *
+ * @features
+ * - Interactive fretboard with CAGED chord shapes
+ * - Major and minor chord quality support
+ * - Multiple display modes (single shape, all shapes, pentatonic overlay)
+ * - Keyboard navigation and accessibility features
+ * - Responsive design for mobile and desktop
+ * - Real-time visual feedback and educational information
+ *
+ * @stateManagement
+ * Uses multiple custom hooks for separation of concerns:
+ * - useCAGEDState: Global visualizer state (selected chord, mode toggles)
+ * - useCAGEDLogic: Music theory calculations and fretboard positioning
+ * - useCAGEDSequence: Dynamic chord sequence generation
+ * - useKeyboardNavigation: Accessibility and keyboard shortcuts
+ *
+ * @musicTheory
+ * Implements complete CAGED system with:
+ * - 5 moveable chord shapes (C, A, G, E, D)
+ * - Major and minor chord variations
+ * - Pentatonic scale overlays
+ * - Root note identification and highlighting
+ * - Gradient blending for overlapping shapes
+ */
 const CAGEDVisualizer = () => {
   const { state, actions } = useCAGEDState();
   const { selectedChord, chordQuality, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
-  // Use custom hooks for logic
+  // Use custom hooks for music theory logic and calculations
   const cagedSequence = useCAGEDSequence(selectedChord);
   const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote, getNoteNameAtFret, shouldShowNoteName } = useCAGEDLogic(selectedChord, chordQuality, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
