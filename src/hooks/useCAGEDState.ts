@@ -32,7 +32,7 @@ function cagedReducer(state: CAGEDState, action: CAGEDAction): CAGEDState {
       return {
         ...state,
         chordQuality: action.payload,
-        currentPosition: 0, // Reset to first position when changing quality
+        // Maintain current position when switching between major/minor
       };
     case 'NEXT_POSITION':
       return {
@@ -104,8 +104,9 @@ const initialState: CAGEDState = {
  * ```
  *
  * @stateManagement
- * State updates follow immutable patterns with automatic position resets when
- * changing chord or quality to maintain consistent user experience.
+ * State updates follow immutable patterns with automatic position reset when
+ * changing chord root (for consistency), but maintains position when switching
+ * between major/minor quality for better user experience.
  *
  * @performance
  * Uses useReducer for complex state logic instead of multiple useState hooks,
