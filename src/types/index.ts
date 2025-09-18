@@ -56,10 +56,49 @@ export type ChordType = 'C' | 'A' | 'G' | 'E' | 'D';
  */
 export type ChordQuality = 'major' | 'minor';
 
+/**
+ * Quiz mode for chord identification practice
+ */
 export type QuizMode = 'major' | 'minor' | 'mixed';
 
+/**
+ * Validation result type for safe type checking operations
+ */
+export type ValidationResult<T> =
+  | { success: true; data: T }
+  | { success: false; errors: ValidationError[] };
+
+/**
+ * Detailed validation error information
+ */
+export interface ValidationError {
+  /** Field name that failed validation */
+  field: string;
+  /** Human-readable error message */
+  message: string;
+  /** The value that was received */
+  received: unknown;
+  /** Expected type or format */
+  expected?: string;
+}
+
+/**
+ * Type-safe localStorage data structure
+ */
+export interface LocalStorageData {
+  /** Quiz preferences data */
+  quizPreferences?: QuizPreferences;
+  /** Theme preferences */
+  theme?: 'light' | 'dark';
+  /** Last updated timestamp */
+  lastUpdated?: number;
+}
+
+/**
+ * Chromatic note values mapping (0-11 representing semitones)
+ */
 export interface ChromaticValues {
-  [key: string]: number;
+  readonly [key: string]: number;
 }
 
 export interface ShapePositions {

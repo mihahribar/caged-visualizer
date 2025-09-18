@@ -2,8 +2,10 @@ import { useMemo } from 'react';
 import type { ChordType, ChordQuality } from '../types';
 import { CHROMATIC_VALUES, CAGED_SHAPES_BY_QUALITY, STRING_TUNING, PENTATONIC_INTERVALS, CHROMATIC_TO_NOTE_NAME, NATURAL_NOTE_POSITIONS } from '../constants';
 
+import { MUSIC_THEORY_CONSTANTS } from '../constants/magicNumbers';
+
 // Minor pentatonic scale intervals (semitones from root)
-const MINOR_PENTATONIC_INTERVALS = [0, 3, 5, 7, 10] as const;
+const MINOR_PENTATONIC_INTERVALS = MUSIC_THEORY_CONSTANTS.MINOR_PENTATONIC_INTERVALS;
 
 /**
  * Custom hook for managing CAGED chord system logic and calculations

@@ -111,7 +111,19 @@ const initialState: CAGEDState = {
  * Uses useReducer for complex state logic instead of multiple useState hooks,
  * reducing re-renders and improving predictability of state changes.
  */
-export function useCAGEDState() {
+export function useCAGEDState(): {
+  state: CAGEDState;
+  actions: {
+    setChord: (chord: ChordType) => void;
+    setChordQuality: (quality: ChordQuality) => void;
+    nextPosition: (sequenceLength: number) => void;
+    previousPosition: (sequenceLength: number) => void;
+    setPosition: (position: number) => void;
+    toggleShowAllShapes: () => void;
+    toggleShowPentatonic: () => void;
+    toggleShowAllNotes: () => void;
+  };
+} {
   const [state, dispatch] = useReducer(cagedReducer, initialState);
 
   const actions = {

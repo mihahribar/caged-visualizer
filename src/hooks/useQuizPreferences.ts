@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { QuizPreferences, QuizMode, ChordType } from '../types';
+import type { QuizPreferences, QuizMode, ChordType, ValidationResult, ValidationError } from '../types';
 import { DEFAULT_QUIZ_CONFIG } from '../constants/quizConfig';
 
 const QUIZ_PREFERENCES_KEY = 'caged-quiz-preferences';
@@ -15,8 +15,24 @@ const DEFAULT_PREFERENCES: QuizPreferences = {
 /**
  * Hook for managing quiz preferences with localStorage persistence
  * Provides CRUD operations for user quiz preferences
+ *
+ * @returns Object containing preference state and update functions
  */
-export function useQuizPreferences() {
+export function useQuizPreferences(): {
+  preferences: QuizPreferences;
+  isLoaded: boolean;
+  updateQuizMode: (quizMode: QuizMode) => void;
+  updateQuestionCount: (questionCount: number) => void;
+  updateAllowedChords: (allowedChords: ChordType[]) => void;
+  updateAllowedShapes: (allowedShapes: ChordType[]) => void;
+  resetToDefaults: () => void;
+  getQuizConfig: () => {
+    questionCount: number;
+    allowedChords: ChordType[];
+    allowedShapes: ChordType[];
+    quizMode: QuizMode;
+  };
+} {
   const [preferences, setPreferences] = useState<QuizPreferences>(DEFAULT_PREFERENCES);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -105,23 +121,106 @@ export function useQuizPreferences() {
 }
 
 /**
- * Validates quiz preferences object structure
+ * Comprehensive validation for quiz preferences with detailed error reporting
+ * @param data - Unknown data to validate as QuizPreferences
+ * @returns ValidationResult with typed data or detailed errors
  */
-function isValidPreferences(prefs: unknown): prefs is QuizPreferences {
-  if (!prefs || typeof prefs !== 'object') {
-    return false;
+function validateQuizPreferences(data: unknown): ValidationResult<QuizPreferences> {
+  const errors: ValidationError[] = [];
+
+  if (!data || typeof data !== 'object') {
+    return {
+      success: false,
+      errors: [{
+        field: 'root',
+        message: 'Quiz preferences must be an object',
+        received: data,
+        expected: 'object'
+      }]
+    };
   }
 
-  const obj = prefs as Record<string, unknown>;
+  const obj = data as Record<string, unknown>;
 
-  return (
-    typeof obj.quizMode === 'string' &&
-    ['major', 'minor', 'mixed'].includes(obj.quizMode) &&
-    typeof obj.questionCount === 'number' &&
-    obj.questionCount > 0 &&
-    Array.isArray(obj.allowedChords) &&
-    obj.allowedChords.length > 0 &&
-    Array.isArray(obj.allowedShapes) &&
-    obj.allowedShapes.length > 0
-  );
+  // Validate quizMode
+  if (typeof obj.quizMode !== 'string' || !['major', 'minor', 'mixed'].includes(obj.quizMode)) {
+    errors.push({
+      field: 'quizMode',
+      message: 'Quiz mode must be "major", "minor", or "mixed"',
+      received: obj.quizMode,
+      expected: '"major" | "minor" | "mixed"'
+    });
+  }
+
+  // Validate questionCount
+  if (typeof obj.questionCount !== 'number' || obj.questionCount <= 0 || !Number.isInteger(obj.questionCount)) {
+    errors.push({
+      field: 'questionCount',
+      message: 'Question count must be a positive integer',
+      received: obj.questionCount,
+      expected: 'positive integer'
+    });
+  }
+
+  // Validate allowedChords
+  if (!Array.isArray(obj.allowedChords) || obj.allowedChords.length === 0) {
+    errors.push({
+      field: 'allowedChords',
+      message: 'Allowed chords must be a non-empty array',
+      received: obj.allowedChords,
+      expected: 'ChordType[]'
+    });
+  } else {
+    const validChords = ['C', 'A', 'G', 'E', 'D'];
+    const invalidChords = obj.allowedChords.filter(chord => !validChords.includes(chord as string));
+    if (invalidChords.length > 0) {
+      errors.push({
+        field: 'allowedChords',
+        message: `Invalid chord types: ${invalidChords.join(', ')}`,
+        received: invalidChords,
+        expected: 'C | A | G | E | D'
+      });
+    }
+  }
+
+  // Validate allowedShapes
+  if (!Array.isArray(obj.allowedShapes) || obj.allowedShapes.length === 0) {
+    errors.push({
+      field: 'allowedShapes',
+      message: 'Allowed shapes must be a non-empty array',
+      received: obj.allowedShapes,
+      expected: 'ChordType[]'
+    });
+  } else {
+    const validShapes = ['C', 'A', 'G', 'E', 'D'];
+    const invalidShapes = obj.allowedShapes.filter(shape => !validShapes.includes(shape as string));
+    if (invalidShapes.length > 0) {
+      errors.push({
+        field: 'allowedShapes',
+        message: `Invalid shape types: ${invalidShapes.join(', ')}`,
+        received: invalidShapes,
+        expected: 'C | A | G | E | D'
+      });
+    }
+  }
+
+  if (errors.length > 0) {
+    return { success: false, errors };
+  }
+
+  // At this point, all validations passed, safe to cast
+  return {
+    success: true,
+    data: obj as unknown as QuizPreferences
+  };
+}
+
+/**
+ * Simple boolean check for backward compatibility
+ * @param prefs - Data to validate
+ * @returns Type predicate for QuizPreferences
+ */
+function isValidPreferences(prefs: unknown): prefs is QuizPreferences {
+  const result = validateQuizPreferences(prefs);
+  return result.success;
 }
