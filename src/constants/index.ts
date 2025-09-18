@@ -1,6 +1,7 @@
 import type { CAGEDShapeData, ChromaticValues, CAGEDShapesByQuality } from '../types';
+import { FRETBOARD_CONSTANTS, MUSIC_THEORY_CONSTANTS } from './magicNumbers';
 
-export const TOTAL_FRETS = 15;
+export const TOTAL_FRETS = FRETBOARD_CONSTANTS.TOTAL_FRETS;
 
 export const STRING_NAMES = ['E', 'B', 'G', 'D', 'A', 'E'] as const;
 
@@ -65,8 +66,8 @@ export const CAGED_MINOR_SHAPE_DATA: CAGEDShapeData = {
   G: {
     name: 'Gm Shape',
     color: '#45B7D1',
-    pattern: [3, -1, 0, 0, 1, 3],
-    fingers: [4, -1, 0, 0, 1, 3],
+    pattern: [3, 0, 0, 0, 1, 3],
+    fingers: [4, 0, 0, 0, 1, 3],
     rootNotes: [0, 5]
   },
   E: {
@@ -110,13 +111,13 @@ export const NATURAL_STARTING_SHAPES = {
 export const FULL_CAGED_SEQUENCE = ['C', 'A', 'G', 'E', 'D'] as const;
 
 // Major pentatonic scale intervals (semitones from root)
-export const PENTATONIC_INTERVALS = [0, 2, 4, 7, 9] as const;
+export const PENTATONIC_INTERVALS = MUSIC_THEORY_CONSTANTS.MAJOR_PENTATONIC_INTERVALS;
 
 // Major chord intervals (semitones from root): Root, Major Third, Perfect Fifth
-export const MAJOR_CHORD_INTERVALS = [0, 4, 7] as const;
+export const MAJOR_CHORD_INTERVALS = MUSIC_THEORY_CONSTANTS.MAJOR_TRIAD_INTERVALS;
 
 // Minor chord intervals (semitones from root): Root, Minor Third, Perfect Fifth
-export const MINOR_CHORD_INTERVALS = [0, 3, 7] as const;
+export const MINOR_CHORD_INTERVALS = MUSIC_THEORY_CONSTANTS.MINOR_TRIAD_INTERVALS;
 
 // Chromatic scale to note names mapping (including sharps/flats)
 export const CHROMATIC_TO_NOTE_NAME: readonly string[] = [
@@ -127,4 +128,4 @@ export const CHROMATIC_TO_NOTE_NAME: readonly string[] = [
 export const NATURAL_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 
 // Chromatic positions of natural notes (no sharps/flats)
-export const NATURAL_NOTE_POSITIONS = [0, 2, 4, 5, 7, 9, 11] as const;
+export const NATURAL_NOTE_POSITIONS = MUSIC_THEORY_CONSTANTS.NATURAL_NOTE_POSITIONS;

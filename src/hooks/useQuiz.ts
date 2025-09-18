@@ -6,7 +6,49 @@ import type { ChordType, QuizAnswer } from '../types';
 
 /**
  * Main quiz hook that combines state management and quiz logic
- * This is the primary interface for quiz functionality
+ *
+ * Primary interface for the CAGED chord identification quiz functionality.
+ * Orchestrates quiz state, question generation, answer validation, and user preferences.
+ * Provides a complete quiz experience with automatic progression and scoring.
+ *
+ * @returns Object containing:
+ *   - quiz: Current quiz state (questions, scores, status)
+ *   - currentQuestion: Active question with shape patterns
+ *   - progress: Completion percentage (0-100)
+ *   - scorePercentage: Current score as percentage
+ *   - config: Quiz configuration based on user preferences
+ *   - preferences: User quiz preferences (difficulty, quantities, etc.)
+ *   - isLoaded: Whether preferences have loaded from localStorage
+ *   - startNewQuiz: Function to begin a new quiz session
+ *   - submitAnswer: Function to submit chord identification answer
+ *   - resetQuiz: Function to reset current quiz state
+ *   - getCurrentQuestionDescription: Get description of current question
+ *   - getResults: Get final quiz results if completed
+ *   - Status flags: isIdle, isActive, isCompleted
+ *
+ * @example
+ * ```typescript
+ * const { startNewQuiz, submitAnswer, currentQuestion, isActive } = useQuiz();
+ *
+ * // Start a new quiz
+ * startNewQuiz();
+ *
+ * // Answer a question
+ * if (currentQuestion) {
+ *   submitAnswer('C'); // User thinks the displayed pattern is C shape
+ * }
+ * ```
+ *
+ * @quizFlow
+ * 1. User preferences loaded from localStorage
+ * 2. Quiz questions generated based on preferences
+ * 3. User answers questions with automatic progression
+ * 4. Results calculated and displayed upon completion
+ * 5. Option to start new quiz or modify preferences
+ *
+ * @performance
+ * Combines multiple specialized hooks for separation of concerns while
+ * providing a unified interface. Uses memoization in sub-hooks for efficiency.
  */
 export function useQuiz() {
   const { preferences, isLoaded, getQuizConfig: getUserConfig, ...preferenceActions } = useQuizPreferences();

@@ -1,21 +1,65 @@
+import { memo, useEffect } from 'react';
 import type { ChordType } from '../types';
 import { STRING_NAMES, TOTAL_FRETS } from '../constants';
+import { usePerformanceMonitor } from '../utils/performanceMonitor';
 
+/**
+ * Props interface for FretboardDisplay component
+ */
 interface FretboardDisplayProps {
+  /** Currently selected root chord (C, A, G, E, D) */
   selectedChord: ChordType;
+  /** Current CAGED shape being displayed (when not showing all) */
   currentShape: string;
+  /** Whether to show all CAGED shapes simultaneously */
   showAllShapes: boolean;
+  /** Whether to overlay pentatonic scale notes */
   showPentatonic: boolean;
+  /** Whether to display note names on natural notes */
   showAllNotes: boolean;
+  /** Function to determine if a chord dot should be shown at position */
   shouldShowDot: (stringIndex: number, fretNumber: number) => boolean;
+  /** Function to get CSS styling for chord dots (colors, gradients) */
   getDotStyle: (stringIndex: number, fretNumber: number) => React.CSSProperties | undefined;
+  /** Function to check if position contains the root note of current chord */
   isRootNote: (stringIndex: number, fretNumber: number) => boolean;
+  /** Function to determine if pentatonic dot should be shown at position */
   shouldShowPentatonicDot: (stringIndex: number, fretNumber: number) => boolean;
+  /** Function to determine if note name should be displayed at position */
   shouldShowNoteName: (stringIndex: number, fretNumber: number) => boolean;
+  /** Function to get note name string for specific position */
   getNoteNameAtFret: (stringIndex: number, fretNumber: number) => string;
 }
 
-export default function FretboardDisplay({
+/**
+ * Guitar fretboard display component with CAGED chord visualization
+ *
+ * Renders an interactive guitar fretboard showing CAGED chord shapes, pentatonic scales,
+ * and note names. Uses a table-based layout with CSS Grid for precise positioning.
+ * Supports multiple display modes and overlays for comprehensive music education.
+ *
+ * @param props - FretboardDisplayProps containing display options and calculation functions
+ *
+ * @returns JSX table element representing guitar fretboard with appropriate ARIA labels
+ *
+ * @accessibility
+ * - Uses semantic table structure with proper headings
+ * - Includes ARIA labels for screen reader navigation
+ * - Provides descriptive role and aria-label attributes
+ * - Fret markers indicate common position references (3rd, 5th, 7th, 9th, 12th frets)
+ *
+ * @styling
+ * - Responsive design adapting to mobile and desktop layouts
+ * - Dark mode support with appropriate color schemes
+ * - Visual hierarchy with chord dots, pentatonic overlays, and note names
+ * - CSS custom properties for precise fretboard spacing
+ *
+ * @performance
+ * - Uses React.memo candidate for props-based re-rendering optimization
+ * - Minimal DOM updates through conditional rendering of overlays
+ * - Efficient iteration over fixed fretboard dimensions (6 strings × 15 frets)
+ */
+function FretboardDisplay({
   selectedChord,
   showAllShapes,
   showPentatonic,
@@ -27,6 +71,12 @@ export default function FretboardDisplay({
   shouldShowNoteName,
   getNoteNameAtFret
 }: FretboardDisplayProps) {
+  const { startRender } = usePerformanceMonitor('FretboardDisplay');
+
+  useEffect(() => {
+    const endRender = startRender();
+    endRender();
+  });
   return (
     <section className="bg-amber-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm" aria-label="Guitar fretboard">
       <table 
@@ -114,3 +164,7 @@ export default function FretboardDisplay({
     </section>
   );
 }
+
+// Memoize FretboardDisplay to prevent unnecessary re-renders when props haven't changed
+// This is especially important since the component renders 90 cells (6 strings × 15 frets)
+export default memo(FretboardDisplay);

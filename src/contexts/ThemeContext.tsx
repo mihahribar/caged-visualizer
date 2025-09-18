@@ -12,7 +12,7 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     // Use the theme already detected in index.html to prevent flash
     if (typeof window !== 'undefined' && window.__INITIAL_THEME__) {
@@ -44,5 +44,5 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
       {children}
     </ThemeContext.Provider>
   );
-};
+}
 

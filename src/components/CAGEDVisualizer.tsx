@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
@@ -9,18 +10,50 @@ import {
   CAGED_SHAPES_BY_QUALITY
 } from '../constants';
 
-const CAGEDVisualizer = () => {
+/**
+ * Main CAGED chord system visualizer component
+ *
+ * Orchestrates the complete CAGED visualization experience by combining state management,
+ * music theory calculations, and user interaction. Provides interactive fretboard display
+ * with multiple viewing modes, keyboard navigation, and educational overlays.
+ *
+ * @returns JSX component with complete CAGED visualizer interface
+ *
+ * @features
+ * - Interactive fretboard with CAGED chord shapes
+ * - Major and minor chord quality support
+ * - Multiple display modes (single shape, all shapes, pentatonic overlay)
+ * - Keyboard navigation and accessibility features
+ * - Responsive design for mobile and desktop
+ * - Real-time visual feedback and educational information
+ *
+ * @stateManagement
+ * Uses multiple custom hooks for separation of concerns:
+ * - useCAGEDState: Global visualizer state (selected chord, mode toggles)
+ * - useCAGEDLogic: Music theory calculations and fretboard positioning
+ * - useCAGEDSequence: Dynamic chord sequence generation
+ * - useKeyboardNavigation: Accessibility and keyboard shortcuts
+ *
+ * @musicTheory
+ * Implements complete CAGED system with:
+ * - 5 moveable chord shapes (C, A, G, E, D)
+ * - Major and minor chord variations
+ * - Pentatonic scale overlays
+ * - Root note identification and highlighting
+ * - Gradient blending for overlapping shapes
+ */
+export default function CAGEDVisualizer() {
   const { state, actions } = useCAGEDState();
   const { selectedChord, chordQuality, currentPosition, showAllShapes, showPentatonic, showAllNotes } = state;
 
-  // Use custom hooks for logic
+  // Use custom hooks for music theory logic and calculations
   const cagedSequence = useCAGEDSequence(selectedChord);
   const { shapePositions, getShapeFret, getShapesAtPosition, createGradientStyle, isPentatonicNote, getNoteNameAtFret, shouldShowNoteName } = useCAGEDLogic(selectedChord, chordQuality, cagedSequence);
   const currentShape = cagedSequence[currentPosition];
 
 
   // Check if a dot should be shown at this position
-  const shouldShowDot = (stringIndex: number, fretNumber: number) => {
+  const shouldShowDot = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       return getShapesAtPosition(stringIndex, fretNumber).length > 0;
     } else {
@@ -29,20 +62,20 @@ const CAGEDVisualizer = () => {
       const shapeFret = getShapeFret(currentShape, stringIndex, basePosition);
       return shapeFret === fretNumber && shapeFret > 0;
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, shapePositions, currentShape, getShapeFret]);
 
   // Get color/style for a dot at this position
-  const getDotStyle = (stringIndex: number, fretNumber: number) => {
+  const getDotStyle = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
       return createGradientStyle(shapesHere);
     } else {
       return { backgroundColor: CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape].color };
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, createGradientStyle, chordQuality, currentShape]);
 
   // Check if this is a root note for the current shape
-  const isRootNote = (stringIndex: number, fretNumber: number) => {
+  const isRootNote = useCallback((stringIndex: number, fretNumber: number) => {
     if (showAllShapes) {
       // When showing all shapes, check if any shape has a root note at this position
       const shapesHere = getShapesAtPosition(stringIndex, fretNumber);
@@ -55,20 +88,20 @@ const CAGEDVisualizer = () => {
       const shape = CAGED_SHAPES_BY_QUALITY[chordQuality][currentShape];
       return shape.rootNotes.includes(stringIndex) && shouldShowDot(stringIndex, fretNumber);
     }
-  };
+  }, [showAllShapes, getShapesAtPosition, chordQuality, currentShape, shouldShowDot]);
 
   // Check if a pentatonic dot should be shown at this position
-  const shouldShowPentatonicDot = (stringIndex: number, fretNumber: number) => {
+  const shouldShowPentatonicDot = useCallback((stringIndex: number, fretNumber: number) => {
     return isPentatonicNote(stringIndex, fretNumber);
-  };
+  }, [isPentatonicNote]);
 
-  const nextPosition = () => {
+  const nextPosition = useCallback(() => {
     actions.nextPosition(cagedSequence.length);
-  };
+  }, [actions, cagedSequence.length]);
 
-  const previousPosition = () => {
+  const previousPosition = useCallback(() => {
     actions.previousPosition(cagedSequence.length);
-  };
+  }, [actions, cagedSequence.length]);
 
   // Add keyboard navigation
   useKeyboardNavigation({
@@ -124,6 +157,4 @@ const CAGEDVisualizer = () => {
       />
     </div>
   );
-};
-
-export default CAGEDVisualizer;
+}
