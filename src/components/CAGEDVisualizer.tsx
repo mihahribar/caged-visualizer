@@ -92,8 +92,22 @@ export default function CAGEDVisualizer() {
 
   // Check if a pentatonic dot should be shown at this position
   const shouldShowPentatonicDot = useCallback((stringIndex: number, fretNumber: number) => {
-    return isPentatonicNote(stringIndex, fretNumber);
-  }, [isPentatonicNote]);
+    if (!isPentatonicNote(stringIndex, fretNumber)) {
+      return false;
+    }
+
+    // If showing all shapes, show all pentatonic notes (current behavior)
+    if (showAllShapes) {
+      return true;
+    }
+
+    // When showing single shape, only show pentatonic notes within the immediate chord shape area
+    const basePosition = shapePositions[currentShape];
+
+    // Very tight range: only show pentatonic notes within 2 frets of the chord shape
+    return fretNumber >= Math.max(0, basePosition) &&
+           fretNumber <= basePosition + 3;
+  }, [isPentatonicNote, showAllShapes, shapePositions, currentShape]);
 
   const nextPosition = useCallback(() => {
     actions.nextPosition(cagedSequence.length);
