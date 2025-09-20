@@ -8,7 +8,7 @@
 import React, { Suspense } from 'react';
 import type { ComponentType, ReactNode } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
-import { LoadingFallback } from './LoadingFallback';
+import { LoadingFallback } from '@/shared/components';
 import type { ComponentError, AppErrorType } from '../types/errors';
 import { errorLogger } from '../utils/errorLogger';
 
