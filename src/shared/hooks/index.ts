@@ -5,6 +5,5 @@
  * learning systems and components.
  */
 
-export { useKeyboardNavigation } from './useKeyboardNavigation';
-export { useTheme } from './useTheme';
-export { useNavigation } from './useNavigation';
+// Currently no shared hooks - system-specific hooks are in their respective modules
+// App-level hooks (theme, navigation) remain in the root /hooks directory

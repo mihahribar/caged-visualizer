@@ -18,6 +18,7 @@ export { default as ShowAllToggle } from './components/ShowAllToggle';
 export { useCAGEDLogic } from './hooks/useCAGEDLogic';
 export { useCAGEDSequence } from './hooks/useCAGEDSequence';
 export { useCAGEDState } from './hooks/useCAGEDState';
+export { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 
 // Type exports
 export type * from './types';

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
-import { useKeyboardNavigation } from '@/shared/hooks/useKeyboardNavigation';
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
 import CAGEDNavigation from './CAGEDNavigation';
 import ViewModeToggles from './ViewModeToggles';
 import { FretboardDisplay } from '@/shared';

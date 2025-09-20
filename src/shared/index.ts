@@ -13,8 +13,7 @@ export type * from './types/fretboard';
 export * from './utils/musicTheory';
 export * from './utils/chordUtils';
 
-// Hook exports
-export * from './hooks';
+// Hook exports - currently no shared hooks, system-specific hooks in their modules
 
 // Constant exports
 export * from './constants/magicNumbers';

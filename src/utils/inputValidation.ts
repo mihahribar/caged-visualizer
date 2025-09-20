@@ -5,8 +5,9 @@
  * messages and type safety for the CAGED Visualizer application.
  */
 
-import type { ChordType, ChordQuality, QuizMode, ValidationResult, ValidationError } from '../types';
-import { VALIDATION_CONSTANTS, UI_CONSTANTS } from '../constants/magicNumbers';
+import type { ChordType, ChordQuality } from '@/shared/types/core';
+import type { QuizMode, ValidationResult, ValidationError } from '@/systems/quiz/types';
+import { VALIDATION_CONSTANTS, UI_CONSTANTS } from '@/shared/constants';
 
 /**
  * Validation rule function type
