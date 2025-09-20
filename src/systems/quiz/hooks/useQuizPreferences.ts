@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import type { QuizPreferences, QuizMode, ChordType, ValidationResult, ValidationError } from '../types';
-import { DEFAULT_QUIZ_CONFIG } from '../constants/quizConfig';
-import { createStorageError } from '../types/errors';
-import { errorLogger } from '../utils/errorLogger';
+import { DEFAULT_QUIZ_CONFIG } from '../constants';
+// Simple error creation for quiz preferences
+function createStorageError(message: string): ValidationError {
+  return {
+    field: 'storage',
+    message,
+    received: 'localStorage operation',
+    expected: 'successful operation'
+  };
+}
 
 const QUIZ_PREFERENCES_KEY = 'caged-quiz-preferences';
 
@@ -57,12 +64,9 @@ export function useQuizPreferences(): {
       }
     } catch (error) {
       const storageError = createStorageError(
-        'read',
-        'localStorage',
-        QUIZ_PREFERENCES_KEY,
-        error instanceof Error ? error : new Error(String(error))
+        `Failed to read quiz preferences from localStorage: ${error instanceof Error ? error.message : String(error)}`
       );
-      errorLogger.logError(storageError, 'medium');
+      console.warn('Quiz preferences storage error:', storageError.message);
       savePreferences(DEFAULT_PREFERENCES);
     } finally {
       setIsLoaded(true);
@@ -76,12 +80,9 @@ export function useQuizPreferences(): {
       setPreferences(newPreferences);
     } catch (error) {
       const storageError = createStorageError(
-        'write',
-        'localStorage',
-        QUIZ_PREFERENCES_KEY,
-        error instanceof Error ? error : new Error(String(error))
+        `Failed to write quiz preferences to localStorage: ${error instanceof Error ? error.message : String(error)}`
       );
-      errorLogger.logError(storageError, 'medium');
+      console.warn('Quiz preferences storage error:', storageError.message);
     }
   };
 

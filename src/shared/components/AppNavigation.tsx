@@ -1,6 +1,6 @@
-import { useNavigation } from '../hooks/useNavigation';
+import { useNavigation } from '../../hooks/useNavigation';
 import ThemeToggle from './ThemeToggle';
-import type { AppPage } from '../types/navigation';
+import type { AppPage } from '../../types/navigation';
 
 export default function AppNavigation() {
   const { currentPage, navigateTo } = useNavigation();

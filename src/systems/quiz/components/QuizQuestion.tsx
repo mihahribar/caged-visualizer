@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { QuizQuestion as QuizQuestionType, ChordType } from '../types';
-import { CAGED_SHAPES_BY_QUALITY, STRING_NAMES, TOTAL_FRETS } from '../constants';
+import { CAGED_SHAPES_BY_QUALITY } from '@/systems/caged/constants';
+import { STRING_NAMES, FRETBOARD_CONSTANTS } from '@/shared/utils/musicTheory';
 
 interface QuizQuestionProps {
   question: QuizQuestionType;
@@ -70,7 +71,7 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
           <thead>
             <tr>
               <th className="w-8"></th>
-              {Array.from({ length: TOTAL_FRETS }, (_, i) => (
+              {Array.from({ length: FRETBOARD_CONSTANTS.TOTAL_FRETS }, (_, i) => (
                 <th key={i} className="text-center pb-2 relative">
                   {[3, 5, 7, 9, 12].includes(i + 1) && (
                     <div className="text-xs text-gray-400 dark:text-gray-500 font-mono">{i + 1}</div>
@@ -90,7 +91,7 @@ export default function QuizQuestion({ question, onSubmitAnswer }: QuizQuestionP
                   {stringName}
                 </th>
                 
-                {Array.from({ length: TOTAL_FRETS }, (_, fretIndex) => (
+                {Array.from({ length: FRETBOARD_CONSTANTS.TOTAL_FRETS }, (_, fretIndex) => (
                   <td 
                     key={fretIndex} 
                     className="fret-cell relative h-8 border-l border-gray-300 dark:border-gray-600 first:border-l-0"

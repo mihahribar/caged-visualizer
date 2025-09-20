@@ -1,5 +1,5 @@
 import type { QuizAnswer, QuizQuestion } from '../types';
-import { CAGED_SHAPES_BY_QUALITY } from '../constants';
+import { CAGED_SHAPES_BY_QUALITY } from '@/systems/caged/constants';
 
 interface QuizResultsProps {
   results: {

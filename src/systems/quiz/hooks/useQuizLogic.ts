@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { QuizQuestion, QuizConfig, ChordType, ChordQuality } from '../types';
-import { CHROMATIC_VALUES } from '../constants';
+import { CHROMATIC_VALUES } from '@/systems/caged/constants';
 
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];

@@ -3,9 +3,9 @@ import { useCAGEDLogic } from '../hooks/useCAGEDLogic';
 import { useCAGEDSequence } from '../hooks/useCAGEDSequence';
 import { useCAGEDState } from '../hooks/useCAGEDState';
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation';
-import CAGEDNavigation from './CAGEDNavigation.tsx';
+import CAGEDNavigation from './CAGEDNavigation';
 import ViewModeToggles from './ViewModeToggles';
-import FretboardDisplay from './FretboardDisplay';
+import { FretboardDisplay } from '@/shared';
 import {
   CAGED_SHAPES_BY_QUALITY
 } from '../constants';
@@ -146,17 +146,20 @@ export default function CAGEDVisualizer() {
       />
 
       <FretboardDisplay
-        selectedChord={selectedChord}
-        currentShape={currentShape}
-        showAllShapes={showAllShapes}
-        showPentatonic={showPentatonic}
-        showAllNotes={showAllNotes}
+        selectedRoot={selectedChord}
+        currentPattern={currentShape}
+        showAllPatterns={showAllShapes}
+        showOverlay={showPentatonic}
+        showNoteNames={showAllNotes}
         shouldShowDot={shouldShowDot}
         getDotStyle={getDotStyle}
-        isRootNote={isRootNote}
-        shouldShowPentatonicDot={shouldShowPentatonicDot}
+        isKeyNote={isRootNote}
+        shouldShowOverlayDot={shouldShowPentatonicDot}
         shouldShowNoteName={shouldShowNoteName}
         getNoteNameAtFret={getNoteNameAtFret}
+        ariaLabel={`Guitar fretboard showing ${selectedChord} ${chordQuality} chord${showAllShapes ? ' in all CAGED positions' : ''}`}
+        overlayColor="green"
+        keyNoteIndicator="R"
       />
 
       <ViewModeToggles

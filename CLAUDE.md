@@ -6,61 +6,135 @@ Interactive React web application for learning the CAGED guitar system - a guita
 **Live Site**: [caged.hribar.org](https://caged.hribar.org)
 
 ## Architecture Summary
-- **Pattern**: Modern React SPA with custom hook architecture
+- **Pattern**: Modern React SPA with **modular multi-system architecture**
 - **State Management**: React hooks with context for theme/navigation, local state for component logic
-- **UI Approach**: Component composition with separation of concerns
+- **UI Approach**: Component composition with separation of concerns and system isolation
 - **Data Flow**: Props down, callbacks up pattern with custom hooks encapsulating complex logic
+- **Modularity**: Complete separation of guitar learning systems with shared utilities
+- **Scalability**: Designed to support multiple guitar learning systems beyond CAGED
 
 ## Tech Stack
 - **Framework**: React 19.1.1 + TypeScript 5.8.3
-- **Build Tool**: Vite 7.1.2 with React plugin
+- **Build Tool**: Vite 7.1.2 with React plugin and TypeScript path aliases
 - **Styling**: TailwindCSS 4.1.12 (latest version with native CSS support)
 - **Development**: ESLint 9.33.0 with TypeScript ESLint
 - **Deployment**: GitHub Actions → GitHub Pages
 
-## Project Structure
+## Project Structure (Modular Multi-System Architecture)
 ```
 src/
 ├── App.tsx                     # Root app with navigation logic
 ├── main.tsx                    # React entry point
 ├── index.css                   # Global styles + TailwindCSS
-├── components/                 # React components
-│   ├── CAGEDVisualizer.tsx    # Main visualizer component
-│   ├── QuizPage.tsx           # Quiz mode entry point
-│   ├── QuizResults.tsx        # Quiz completion screen
-│   ├── AppNavigation.tsx      # Top navigation bar
-│   ├── FretboardDisplay.tsx   # Guitar fretboard renderer
-│   ├── CAGEDNavigation.tsx    # CAGED shape navigation
-│   ├── ChordQualityToggle.tsx # Major/minor toggle
-│   ├── ShowAllToggle.tsx      # Show all shapes toggle
-│   ├── AllNotesToggle.tsx     # All notes display toggle
-│   ├── QuizModeToggle.tsx     # Quiz mode navigation
-│   └── ...                    # Additional UI components
-├── hooks/                     # Custom React hooks
-│   ├── useCAGEDLogic.ts      # Core CAGED calculation logic
-│   ├── useCAGEDState.ts      # Visualizer state management
-│   ├── useCAGEDSequence.ts   # CAGED shape sequencing
-│   ├── useQuiz.ts            # Quiz state management
-│   ├── useQuizLogic.ts       # Quiz question generation
-│   ├── useQuizState.ts       # Quiz state handling
-│   ├── useQuizPreferences.ts # Quiz preferences
-│   ├── useKeyboardNavigation.ts # Keyboard shortcuts
-│   ├── useTheme.ts           # Theme management
-│   ├── useNavigation.ts      # App navigation
-│   └── ...                    # Additional hooks
-├── contexts/                  # React contexts
+├── shared/                     # Reusable across all learning systems
+│   ├── components/            # Shared UI components
+│   │   ├── FretboardDisplay.tsx   # Guitar fretboard renderer
+│   │   ├── AppNavigation.tsx      # Top navigation bar
+│   │   ├── ThemeToggle.tsx        # Theme switcher
+│   │   └── LoadingFallback.tsx    # Loading states
+│   ├── constants/             # Shared constants and magic numbers
+│   │   └── magicNumbers.ts    # Fretboard, UI, validation constants
+│   ├── types/                 # Shared TypeScript definitions
+│   │   ├── core.ts            # Core types (ChordType, ChordQuality)
+│   │   └── fretboard.ts       # Fretboard-related types
+│   ├── utils/                 # Shared utilities
+│   │   ├── musicTheory.ts     # Music theory calculations
+│   │   └── chordUtils.ts      # Chord calculation utilities
+│   └── hooks/                 # Shared hooks (currently none)
+├── systems/                   # Modular learning systems
+│   ├── caged/                 # CAGED chord system module
+│   │   ├── components/        # CAGED-specific components
+│   │   │   ├── CAGEDVisualizer.tsx    # Main visualizer
+│   │   │   ├── CAGEDNavigation.tsx    # Shape navigation
+│   │   │   ├── ViewModeToggles.tsx    # Toggle controls
+│   │   │   ├── ChordQualityToggle.tsx # Major/minor toggle
+│   │   │   ├── ShowAllToggle.tsx      # Show all shapes
+│   │   │   ├── PentatonicToggle.tsx   # Pentatonic overlay
+│   │   │   └── AllNotesToggle.tsx     # All notes display
+│   │   ├── hooks/             # CAGED-specific hooks
+│   │   │   ├── useCAGEDLogic.ts       # Core calculations
+│   │   │   ├── useCAGEDState.ts       # State management
+│   │   │   ├── useCAGEDSequence.ts    # Shape sequencing
+│   │   │   └── useKeyboardNavigation.ts # Keyboard shortcuts
+│   │   ├── constants/         # CAGED system data/patterns
+│   │   │   └── index.ts       # Shape definitions and constants
+│   │   ├── types/             # CAGED-specific types
+│   │   │   └── index.ts       # CAGED interfaces and types
+│   │   └── utils/             # CAGED-specific utilities
+│   └── quiz/                  # Quiz learning system module
+│       ├── components/        # Quiz-specific components
+│       │   ├── QuizPage.tsx           # Quiz mode entry point
+│       │   ├── QuizQuestion.tsx       # Individual questions
+│       │   ├── QuizResults.tsx        # Quiz completion screen
+│       │   ├── QuizProgress.tsx       # Progress indicator
+│       │   └── QuizModeToggle.tsx     # Quiz mode navigation
+│       ├── hooks/             # Quiz-specific hooks
+│       │   ├── useQuiz.ts             # Quiz state management
+│       │   ├── useQuizLogic.ts        # Question generation
+│       │   ├── useQuizState.ts        # Quiz state handling
+│       │   └── useQuizPreferences.ts  # Quiz preferences
+│       ├── constants/         # Quiz configuration
+│       │   ├── index.ts       # Quiz constants
+│       │   └── quizConfig.ts  # Default quiz settings
+│       └── types/             # Quiz-specific types
+│           └── index.ts       # Quiz interfaces and types
+├── components/                # App infrastructure components
+│   ├── ErrorBoundary.tsx     # Error handling
+│   └── SafeComponent.tsx     # Safe component wrapper
+├── contexts/                  # React contexts for global state
 │   ├── ThemeContext.tsx      # Dark/light theme management
 │   ├── theme.ts              # Theme type definitions
 │   ├── NavigationContext.tsx # App navigation state
 │   └── NavigationContextCore.ts # Navigation core logic
-├── constants/                 # Static data and configuration
-│   ├── index.ts              # CAGED system data/patterns
-│   └── quizConfig.ts         # Quiz generation settings
-├── types/                     # TypeScript type definitions
-│   ├── index.ts              # Main types (CAGED, Quiz)
-│   └── navigation.ts         # Navigation types
+├── hooks/                     # App-level React hooks
+│   ├── useTheme.ts           # Theme management
+│   └── useNavigation.ts      # App navigation
+├── types/                     # Infrastructure type definitions
+│   ├── navigation.ts         # Navigation types
+│   └── errors.ts             # Error handling types
+├── utils/                     # Infrastructure utilities
+│   ├── errorLogger.ts        # Error logging
+│   ├── inputValidation.ts    # Input validation
+│   ├── performanceMonitor.ts # Performance monitoring
+│   └── safeStorage.ts        # Safe localStorage operations
 └── assets/                    # Static assets
 ```
+
+## Modular Architecture Features
+
+### TypeScript Path Aliases
+The project uses TypeScript path aliases for clean, predictable imports:
+- `@/shared` - Access to shared utilities, components, and types
+- `@/systems/caged` - CAGED system module imports
+- `@/systems/quiz` - Quiz system module imports
+
+Example imports:
+```typescript
+// Shared utilities
+import { FretboardDisplay } from '@/shared/components';
+import { FRETBOARD_CONSTANTS } from '@/shared/constants';
+
+// System-specific imports
+import { CAGEDVisualizer } from '@/systems/caged/components';
+import { useQuiz } from '@/systems/quiz/hooks';
+```
+
+### Barrel Exports
+Each module provides clean barrel exports for easy consumption:
+- `src/shared/index.ts` - All shared resources
+- `src/systems/caged/index.ts` - Complete CAGED system
+- `src/systems/quiz/index.ts` - Complete quiz system
+
+### System Isolation
+- Each learning system is completely self-contained
+- Systems can access shared utilities but not each other directly
+- Cross-system dependencies must go through shared utilities
+- Each system maintains its own types, constants, and business logic
+
+### Code Splitting & Performance
+- Quiz system is lazy-loaded for optimal initial bundle size
+- Modular structure enables excellent tree shaking
+- Bundle sizes: Main (~213kB), Quiz chunk (~18kB), CSS (~33kB)
 
 ## Code Conventions & Patterns
 
@@ -187,32 +261,50 @@ When asking Claude for help with this project:
 - **TypeScript strict mode** - all code must pass type checking
 
 ### File Organization Rules
+- **System Modules**: Complete isolation of learning systems in `src/systems/[system]/`
+- **Shared Resources**: Reusable components, utilities, types in `src/shared/`
+- **Infrastructure**: App-level components, contexts, utils in root directories
 - **Components**: UI rendering only, delegate logic to hooks
-- **Hooks**: Encapsulate state and complex calculations
-- **Constants**: Static data, no logic
-- **Types**: TypeScript definitions only
-- **Contexts**: Global state management
+- **Hooks**: Encapsulate state and complex calculations within system boundaries
+- **Constants**: Static data, no logic - organized by system
+- **Types**: TypeScript definitions - shared types in `src/shared/types/`, system-specific in system modules
+- **Contexts**: Global app state management (theme, navigation) only
 
 ### Common Task Templates
 
 #### Adding New Quiz Features
-1. Update types in `src/types/index.ts`
-2. Modify quiz logic in `src/hooks/useQuiz.ts` or related hooks
-3. Update UI components in `src/components/Quiz*.tsx`
-4. Test with different chord combinations
+1. Update types in `src/systems/quiz/types/index.ts`
+2. Modify quiz logic in `src/systems/quiz/hooks/` (useQuiz.ts or related hooks)
+3. Update UI components in `src/systems/quiz/components/Quiz*.tsx`
+4. Add/update constants in `src/systems/quiz/constants/`
+5. Test with different chord combinations
 
 #### Modifying CAGED Logic
-1. Review music theory in `src/constants/index.ts`
-2. Update calculation logic in `src/hooks/useCAGEDLogic.ts`
+1. Review music theory in `src/systems/caged/constants/index.ts`
+2. Update calculation logic in `src/systems/caged/hooks/useCAGEDLogic.ts`
 3. Test with all chord shapes and positions
 4. Verify visual accuracy on fretboard
 
-#### Adding UI Components
-1. Create component file in `src/components/`
+#### Adding New Learning System
+1. Create new directory `src/systems/[system-name]/`
+2. Set up standard structure: `components/`, `hooks/`, `types/`, `constants/`
+3. Create barrel export `src/systems/[system-name]/index.ts`
+4. Add navigation integration in `src/types/navigation.ts`
+5. Import and integrate in App.tsx
+
+#### Adding Shared Components
+1. Create component file in `src/shared/components/`
 2. Define props interface with TypeScript
 3. Use existing TailwindCSS patterns
-4. Import and integrate in parent component
+4. Add to barrel export in `src/shared/components/index.ts`
 5. Test dark/light theme compatibility
+
+#### Adding System-Specific Components
+1. Create component file in `src/systems/[system]/components/`
+2. Use system-specific types from `../types`
+3. Import shared utilities from `@/shared`
+4. Add to system barrel export
+5. Test within system context
 
 #### Theme/Styling Changes
 1. Check existing TailwindCSS usage patterns
@@ -244,16 +336,23 @@ When asking Claude for help with this project:
 ## Project-Specific Notes
 
 ### Unique Architectural Decisions
-- **Custom hooks pattern**: Logic separated from UI completely
+- **Modular multi-system architecture**: Complete isolation of learning systems
+- **TypeScript path aliases**: Clean imports with `@/shared` and `@/systems`
+- **System isolation with shared utilities**: No direct cross-system dependencies
+- **Custom hooks pattern**: Logic separated from UI completely within systems
 - **Mathematical chord calculation**: Real music theory implementation
 - **Gradient overlay system**: Complex visual blending for overlapping patterns
 - **Context-minimal approach**: Only theme and navigation in context
+- **Code splitting by system**: Quiz system lazy-loaded for performance
 
 ### Performance Considerations
-- **useMemo for calculations**: CAGED logic is memoized
-- **Minimal re-renders**: State changes are targeted
+- **Modular tree shaking**: Excellent bundle optimization through system isolation
+- **Code splitting**: Quiz system lazy-loaded (~18kB chunk), reducing initial bundle
+- **useMemo for calculations**: CAGED logic is memoized within systems
+- **Minimal re-renders**: State changes are targeted and system-contained
 - **Efficient gradient generation**: Dynamic CSS generation
-- **Vite build optimization**: Tree shaking and bundling
+- **Vite build optimization**: Enhanced tree shaking and bundling with path aliases
+- **System isolation**: Prevents unnecessary cross-system re-renders
 
 ### Security Considerations
 - **Static site**: No server-side vulnerabilities

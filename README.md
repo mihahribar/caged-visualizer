@@ -1,6 +1,6 @@
 # CAGED Guitar System Visualizer
 
-An interactive web application for learning the CAGED guitar system.
+An interactive web application for learning the CAGED guitar system with a modular, extensible architecture designed to support multiple guitar learning systems.
 
 ## Features
 - **Visual fretboard** with color-coded chord shapes
@@ -58,3 +58,73 @@ An interactive web application for learning the CAGED guitar system.
 ```bash
 npm run build
 ```
+
+## Project Architecture
+
+This project features a **modular multi-system architecture** designed for scalability and maintainability:
+
+### Directory Structure
+```
+src/
+├── shared/                 # Reusable components, utilities, and types
+│   ├── components/        # Shared UI components (FretboardDisplay, AppNavigation)
+│   ├── constants/         # Shared constants and magic numbers
+│   ├── types/            # Shared TypeScript type definitions
+│   └── utils/            # Shared utilities (music theory, chord calculations)
+├── systems/              # Modular learning systems
+│   ├── caged/           # CAGED chord system module
+│   │   ├── components/  # CAGED-specific components
+│   │   ├── constants/   # CAGED system constants
+│   │   ├── hooks/       # CAGED-specific React hooks
+│   │   ├── types/       # CAGED system types
+│   │   └── utils/       # CAGED-specific utilities
+│   └── quiz/            # Quiz learning system module
+│       ├── components/  # Quiz-specific components
+│       ├── constants/   # Quiz system constants
+│       ├── hooks/       # Quiz-specific React hooks
+│       └── types/       # Quiz system types
+├── components/          # App infrastructure components
+├── contexts/           # React contexts for global state
+├── hooks/             # App-level React hooks
+├── types/             # Infrastructure type definitions
+└── utils/             # Infrastructure utilities
+```
+
+### Key Architecture Features
+- **Modular Systems**: Each guitar learning system (CAGED, Quiz) is completely isolated
+- **Shared Resources**: Common components and utilities are centralized for reuse
+- **TypeScript Path Aliases**: Clean imports using `@/shared` and `@/systems`
+- **Barrel Exports**: Each module provides clean export interfaces
+- **Code Splitting**: Quiz system is lazy-loaded for optimal performance
+- **Tree Shaking**: Optimized bundle sizes through proper module structure
+
+### Tech Stack
+- **Framework**: React 19.1.1 + TypeScript 5.8.3
+- **Build Tool**: Vite 7.1.2 with React plugin and path aliases
+- **Styling**: TailwindCSS 4.1.12 with dark/light theme support
+- **Code Quality**: ESLint 9.33.0 with TypeScript ESLint
+- **Deployment**: GitHub Actions → GitHub Pages
+
+### Development Scripts
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Production build with TypeScript checking
+- `npm run lint` - Code quality and style checking
+- `npm run preview` - Preview production build locally
+
+### Bundle Optimization
+The modular architecture enables excellent bundle optimization:
+- **Main bundle**: ~213kB (66kB gzipped) - Core app + CAGED system
+- **Quiz chunk**: ~18kB (5.5kB gzipped) - Lazy-loaded quiz system
+- **CSS bundle**: ~33kB (6.5kB gzipped) - Optimized styles
+- **Total**: Fast loading with effective code splitting
+
+## Contributing
+
+The modular architecture makes it easy to add new guitar learning systems:
+
+1. Create a new directory under `src/systems/[system-name]/`
+2. Follow the established pattern: `components/`, `hooks/`, `types/`, `constants/`
+3. Add system exports to a barrel export file
+4. Import and integrate in the main app
+
+This design supports future expansion to other guitar learning methods like scale patterns, chord progressions, or music theory exercises.

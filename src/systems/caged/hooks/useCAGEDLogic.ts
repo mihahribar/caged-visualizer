@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
-import type { ChordType, ChordQuality } from '../types';
-import { CHROMATIC_VALUES, CAGED_SHAPES_BY_QUALITY, STRING_TUNING, PENTATONIC_INTERVALS, CHROMATIC_TO_NOTE_NAME, NATURAL_NOTE_POSITIONS } from '../constants';
-
-import { MUSIC_THEORY_CONSTANTS } from '../constants/magicNumbers';
-
-// Minor pentatonic scale intervals (semitones from root)
-const MINOR_PENTATONIC_INTERVALS = MUSIC_THEORY_CONSTANTS.MINOR_PENTATONIC_INTERVALS;
+import type { ChordType, ChordQuality } from '@/shared/types/core';
+import { CHROMATIC_VALUES, CAGED_SHAPES_BY_QUALITY } from '../constants';
+import {
+  getNoteNameAtFret,
+  shouldShowNoteName,
+  isPentatonicNote,
+  getPentatonicPositions
+} from '@/shared/utils/musicTheory';
+import { getPentatonicIntervals } from '@/shared/utils/chordUtils';
 
 /**
  * Custom hook for managing CAGED chord system logic and calculations
@@ -133,81 +135,30 @@ export function useCAGEDLogic(selectedChord: ChordType, chordQuality: ChordQuali
     }
   }, [shapeData]);
 
-  /**
-   * Get the chromatic note value at a specific string and fret position
-   * @param stringIndex - Guitar string index (0 = low E, 5 = high E)
-   * @param fretNumber - Fret number (0 = open, 1 = first fret, etc.)
-   * @returns Chromatic value (0-11) representing the note
-   */
-  const getNoteAtFret = (stringIndex: number, fretNumber: number) => {
-    // Add string's open tuning value to fret offset, wrap to single octave
-    return (STRING_TUNING[stringIndex] + fretNumber) % 12;
-  };
-
-  // Check if a note at a specific position is part of the pentatonic scale
-  const isPentatonicNote = useMemo(() => {
-    const rootNote = CHROMATIC_VALUES[selectedChord]; // Root note as chromatic value
-    // Select appropriate pentatonic intervals based on chord quality
-    const intervals = chordQuality === 'major' ? PENTATONIC_INTERVALS : MINOR_PENTATONIC_INTERVALS;
-    // Calculate all pentatonic notes for this key by adding intervals to root
-    const pentatonicNotes = intervals.map(interval => (rootNote + interval) % 12);
+  // Use shared pentatonic logic
+  const isPentatonicNoteAtPosition = useMemo(() => {
+    const rootNote = CHROMATIC_VALUES[selectedChord];
+    const intervals = getPentatonicIntervals(chordQuality);
 
     return (stringIndex: number, fretNumber: number) => {
-      const noteAtFret = getNoteAtFret(stringIndex, fretNumber);
-      return pentatonicNotes.includes(noteAtFret);
+      return isPentatonicNote(stringIndex, fretNumber, rootNote, intervals);
     };
   }, [selectedChord, chordQuality]);
 
-  /**
-   * Get all pentatonic note positions across the entire fretboard
-   * Used for overlay display when pentatonic mode is enabled
-   */
-  const getPentatonicPositions = useMemo(() => {
-    const positions: Array<{ stringIndex: number; fretNumber: number }> = [];
-
-    // Scan entire fretboard (6 strings x 16 frets including open)
-    for (let stringIndex = 0; stringIndex < STRING_TUNING.length; stringIndex++) {
-      for (let fretNumber = 0; fretNumber <= 15; fretNumber++) {
-        if (isPentatonicNote(stringIndex, fretNumber)) {
-          positions.push({ stringIndex, fretNumber });
-        }
-      }
-    }
-
-    return positions;
-  }, [isPentatonicNote]);
-
-  /**
-   * Get the note name (e.g., "C", "F#", "Bb") at a specific string and fret
-   * @param stringIndex - Guitar string index (0 = low E, 5 = high E)
-   * @param fretNumber - Fret number (0 = open, 1 = first fret, etc.)
-   * @returns Note name string with sharp/flat notation
-   */
-  const getNoteNameAtFret = useMemo(() => (stringIndex: number, fretNumber: number): string => {
-    const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
-    return CHROMATIC_TO_NOTE_NAME[chromaticValue];
-  }, []);
-
-  /**
-   * Check if a note should be displayed in "all notes" mode
-   * Only shows natural notes (A, B, C, D, E, F, G) to reduce visual clutter
-   * @param stringIndex - Guitar string index
-   * @param fretNumber - Fret number
-   * @returns True if note should be shown (natural notes only)
-   */
-  const shouldShowNoteName = useMemo(() => (stringIndex: number, fretNumber: number): boolean => {
-    const chromaticValue = (STRING_TUNING[stringIndex] + fretNumber) % 12;
-    // Filter to only natural notes (exclude sharps/flats for cleaner display)
-    return NATURAL_NOTE_POSITIONS.includes(chromaticValue as typeof NATURAL_NOTE_POSITIONS[number]);
-  }, []);
+  // Use shared pentatonic positions utility
+  const allPentatonicPositions = useMemo(() => {
+    const rootNote = CHROMATIC_VALUES[selectedChord];
+    const intervals = getPentatonicIntervals(chordQuality);
+    return getPentatonicPositions(rootNote, intervals);
+  }, [selectedChord, chordQuality]);
 
   return {
     shapePositions,
     getShapeFret,
     getShapesAtPosition,
     createGradientStyle,
-    isPentatonicNote,
-    getPentatonicPositions,
+    isPentatonicNote: isPentatonicNoteAtPosition,
+    getPentatonicPositions: allPentatonicPositions,
     getNoteNameAtFret,
     shouldShowNoteName,
   };
