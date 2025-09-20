@@ -7,6 +7,9 @@
 
 import { MUSIC_THEORY_CONSTANTS, FRETBOARD_CONSTANTS } from '../constants/magicNumbers';
 
+// Re-export constants for convenience
+export { FRETBOARD_CONSTANTS };
+
 /**
  * Standard guitar tuning (semitones from C)
  * E(4), B(11), G(7), D(2), A(9), E(4)
