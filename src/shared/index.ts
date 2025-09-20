@@ -13,6 +13,9 @@ export type * from './types/fretboard';
 export * from './utils/musicTheory';
 export * from './utils/chordUtils';
 
+// Hook exports
+export * from './hooks';
+
 // Constant exports
 export * from './constants/magicNumbers';
 
