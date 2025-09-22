@@ -99,3 +99,28 @@ export interface CAGEDViewModeProps {
 export interface ShapePositions {
   [key: string]: number;
 }
+
+/**
+ * Pentatonic box pattern definition
+ * Each box covers a specific fret range and has defined note positions
+ */
+export interface PentatonicBoxPattern {
+  /** Starting fret for this box pattern (relative to root position) */
+  startFret: number;
+  /** Ending fret for this box pattern (relative to root position) */
+  endFret: number;
+  /** Description of the box pattern */
+  name: string;
+}
+
+/**
+ * Pentatonic box patterns organized by quality and position
+ */
+export interface PentatonicBoxPatterns {
+  major: {
+    [position: number]: PentatonicBoxPattern;
+  };
+  minor: {
+    [position: number]: PentatonicBoxPattern;
+  };
+}

@@ -31,8 +31,6 @@ interface FretboardDisplayProps {
   getNoteNameAtFret: (stringIndex: StringIndex, fretNumber: FretNumber) => string;
   /** Optional custom aria label for the fretboard */
   ariaLabel?: string;
-  /** Optional overlay color for custom styling */
-  overlayColor?: string;
   /** Optional key note indicator text */
   keyNoteIndicator?: string;
 }
@@ -78,7 +76,6 @@ function FretboardDisplay({
   shouldShowNoteName,
   getNoteNameAtFret,
   ariaLabel,
-  overlayColor = 'green',
   keyNoteIndicator = 'R'
 }: FretboardDisplayProps) {
   const defaultAriaLabel = ariaLabel ||

@@ -7,7 +7,9 @@ import CAGEDNavigation from './CAGEDNavigation';
 import ViewModeToggles from './ViewModeToggles';
 import { FretboardDisplay } from '@/shared';
 import {
-  CAGED_SHAPES_BY_QUALITY
+  CAGED_SHAPES_BY_QUALITY,
+  PENTATONIC_BOX_PATTERNS,
+  CAGED_TO_PENTATONIC_BOX
 } from '../constants';
 
 /**
@@ -101,13 +103,22 @@ export default function CAGEDVisualizer() {
       return true;
     }
 
-    // When showing single shape, only show pentatonic notes within the immediate chord shape area
+    // When showing single shape, use the specific pentatonic box pattern
+    // that corresponds to the current CAGED shape
     const basePosition = shapePositions[currentShape];
+    const boxNumber = CAGED_TO_PENTATONIC_BOX[currentShape];
+    const boxPattern = PENTATONIC_BOX_PATTERNS[chordQuality][boxNumber];
 
-    // Very tight range: only show pentatonic notes within 2 frets of the chord shape
-    return fretNumber >= Math.max(0, basePosition) &&
-           fretNumber <= basePosition + 3;
-  }, [isPentatonicNote, showAllShapes, shapePositions, currentShape]);
+    if (!boxPattern) {
+      return false;
+    }
+
+    // Calculate the actual fret range for this pentatonic box
+    const boxStartFret = Math.max(0, basePosition + boxPattern.startFret);
+    const boxEndFret = basePosition + boxPattern.endFret;
+
+    return fretNumber >= boxStartFret && fretNumber <= boxEndFret;
+  }, [isPentatonicNote, showAllShapes, shapePositions, currentShape, chordQuality]);
 
   const nextPosition = useCallback(() => {
     actions.nextPosition(cagedSequence.length);
@@ -158,7 +169,6 @@ export default function CAGEDVisualizer() {
         shouldShowNoteName={shouldShowNoteName}
         getNoteNameAtFret={getNoteNameAtFret}
         ariaLabel={`Guitar fretboard showing ${selectedChord} ${chordQuality} chord${showAllShapes ? ' in all CAGED positions' : ''}`}
-        overlayColor="green"
         keyNoteIndicator="R"
       />
 
