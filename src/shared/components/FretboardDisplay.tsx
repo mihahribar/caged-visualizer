@@ -133,7 +133,7 @@ function FretboardDisplay({
                       className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium shadow-sm ${
                         isKeyNote(stringIndex as StringIndex, fretIndex + 1) ? 'ring-2 ring-gray-800 dark:ring-gray-200' : ''
                       } ${
-                        showOverlay && shouldShowOverlayDot(stringIndex as StringIndex, fretIndex + 1) ? `ring-2 ring-${overlayColor}-500 dark:ring-${overlayColor}-400` : ''
+                        showOverlay && shouldShowOverlayDot(stringIndex as StringIndex, fretIndex + 1) ? 'ring-2 ring-green-600 dark:ring-green-500' : ''
                       }`}
                       style={getDotStyle(stringIndex as StringIndex, fretIndex + 1)}
                       aria-label={`${isKeyNote(stringIndex as StringIndex, fretIndex + 1) ? 'Key note' : 'Pattern note'}${showOverlay && shouldShowOverlayDot(stringIndex as StringIndex, fretIndex + 1) ? ' (also overlay note)' : ''} on ${stringName} string, fret ${fretIndex + 1}`}
@@ -145,7 +145,7 @@ function FretboardDisplay({
                   {/* Overlay dot (when not covered by main dot) */}
                   {showOverlay && shouldShowOverlayDot(stringIndex as StringIndex, fretIndex + 1) && !shouldShowDot(stringIndex as StringIndex, fretIndex + 1) && (
                     <div
-                      className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-${overlayColor}-500 dark:border-${overlayColor}-400 bg-${overlayColor}-500/30 dark:bg-${overlayColor}-400/30`}
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-green-600 dark:border-green-500 bg-green-600/30 dark:bg-green-500/30"
                       aria-label={`Overlay note on ${stringName} string, fret ${fretIndex + 1}`}
                     />
                   )}
