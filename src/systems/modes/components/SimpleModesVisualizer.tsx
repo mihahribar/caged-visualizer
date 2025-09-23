@@ -45,60 +45,36 @@ export default function SimpleModesVisualizer() {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          Guitar Modes
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Explore the seven modes of the major scale
-        </p>
-      </div>
-
       {/* Mode Selector */}
       <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
           Select Mode:
         </label>
-        <select
-          value={selectedMode}
-          onChange={(e) => setSelectedMode(e.target.value as keyof typeof MODES)}
-          className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        >
-          {Object.keys(MODES).map((mode) => (
-            <option key={mode} value={mode}>
-              {mode}
-            </option>
+        <div className="grid grid-cols-3 gap-2">
+          {Object.entries(MODES).map(([mode, data]) => (
+            <button
+              key={mode}
+              onClick={() => setSelectedMode(mode as keyof typeof MODES)}
+              className={`
+                p-2 rounded font-medium text-left transition-all duration-200
+                ${selectedMode === mode
+                  ? 'ring-2 ring-offset-1 ring-offset-gray-50 dark:ring-offset-gray-800 shadow-lg'
+                  : 'hover:shadow-md'
+                }
+              `}
+              style={{
+                backgroundColor: data.color,
+                color: 'white'
+              }}
+            >
+              <div className="flex flex-col gap-0.5">
+                <div className="text-sm font-bold">{mode}</div>
+                <div className="text-xs opacity-90">
+                  Root: {data.root} • {data.intervals.join('-')}
+                </div>
+              </div>
+            </button>
           ))}
-        </select>
-      </div>
-
-      {/* Controls */}
-      <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            checked={showNoteNames}
-            onChange={(e) => setShowNoteNames(e.target.checked)}
-            className="mr-2"
-          />
-          <span className="text-sm text-gray-700 dark:text-gray-300">Show note names</span>
-        </label>
-      </div>
-
-      {/* Mode Info */}
-      <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-          {selectedMode}
-        </h3>
-        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-          <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: currentMode.color }}
-          />
-          <span>Root: {currentMode.root}</span>
-          <span>•</span>
-          <span>Intervals: {currentMode.intervals.join('-')}</span>
         </div>
       </div>
 
@@ -146,6 +122,36 @@ export default function SimpleModesVisualizer() {
           keyNoteIndicator="R"
           ariaLabel={`Guitar fretboard showing ${selectedMode} mode`}
         />
+      </div>
+
+      {/* Note Names Toggle Control */}
+      <div className="mt-6">
+        <section className="mb-4" aria-label="View mode controls">
+          <div className="flex items-center justify-end">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-700 dark:text-gray-300">Show Note Names</span>
+              <button
+                onClick={() => setShowNoteNames(!showNoteNames)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${
+                  showNoteNames
+                    ? 'bg-blue-600 dark:bg-blue-500'
+                    : 'bg-gray-200 dark:bg-gray-600'
+                }`}
+                aria-pressed={showNoteNames}
+                aria-label={showNoteNames ? 'Hide note names on fretboard' : 'Show note names on fretboard'}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                    showNoteNames ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {showNoteNames ? 'ON' : 'OFF'}
+              </span>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
