@@ -4,12 +4,12 @@ import type { StringIndex, FretNumber } from '@/shared/types/core';
 
 // Simple mode data
 const MODES = {
-  'C Major (Ionian)': { root: 'C', intervals: [0, 2, 4, 5, 7, 9, 11], color: '#3B82F6' },
+  'C Ionian (Major)': { root: 'C', intervals: [0, 2, 4, 5, 7, 9, 11], color: '#3B82F6' },
   'D Dorian': { root: 'D', intervals: [0, 2, 3, 5, 7, 9, 10], color: '#10B981' },
   'E Phrygian': { root: 'E', intervals: [0, 1, 3, 5, 7, 8, 10], color: '#F59E0B' },
   'F Lydian': { root: 'F', intervals: [0, 2, 4, 6, 7, 9, 11], color: '#EF4444' },
   'G Mixolydian': { root: 'G', intervals: [0, 2, 4, 5, 7, 9, 10], color: '#8B5CF6' },
-  'A Aeolian': { root: 'A', intervals: [0, 2, 3, 5, 7, 8, 10], color: '#EC4899' },
+  'A Aeolian (Minor)': { root: 'A', intervals: [0, 2, 3, 5, 7, 8, 10], color: '#EC4899' },
   'B Locrian': { root: 'B', intervals: [0, 1, 3, 5, 6, 8, 10], color: '#6B7280' }
 };
 
@@ -38,7 +38,7 @@ function isRootNote(note: string, rootNote: string): boolean {
 }
 
 export default function SimpleModesVisualizer() {
-  const [selectedMode, setSelectedMode] = useState<keyof typeof MODES>('C Major (Ionian)');
+  const [selectedMode, setSelectedMode] = useState<keyof typeof MODES>('C Ionian (Major)');
   const [showNoteNames, setShowNoteNames] = useState(true);
 
   const currentMode = MODES[selectedMode];
@@ -122,8 +122,6 @@ export default function SimpleModesVisualizer() {
 
             return {
               backgroundColor: currentMode.color,
-              border: isRoot ? '3px solid white' : '1px solid rgba(255,255,255,0.5)',
-              transform: isRoot ? 'scale(1.2)' : 'scale(1.0)',
               zIndex: isRoot ? 10 : 5
             };
           }}
@@ -144,6 +142,9 @@ export default function SimpleModesVisualizer() {
           getNoteNameAtFret={(stringIndex: StringIndex, fretNumber: FretNumber): string => {
             return getNoteAtFret(stringIndex, fretNumber);
           }}
+
+          keyNoteIndicator="R"
+          ariaLabel={`Guitar fretboard showing ${selectedMode} mode`}
         />
       </div>
     </div>
