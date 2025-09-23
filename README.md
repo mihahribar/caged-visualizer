@@ -10,6 +10,7 @@ An interactive web application for learning the CAGED guitar system with a modul
 - Show individual shapes or all shapes at once with gradient blending
 - **Pentatonic Scale Overlay** - Toggle to show major/minor pentatonic scale notes over chord shapes for music theory context
 - **All Notes Display** - Toggle to show natural note names (E, F, G, A, B, C, D) on all fret positions for fretboard navigation
+- **Guitar Modes System** - Learn all 7 traditional modes (Ionian through Locrian) with color-coded visualization and interactive mode selection
 - **Quiz Mode** - Interactive chord identification quiz with scoring system
 - **Dark/Light theme toggle** with system preference detection
 - Authentic neck inlay dots for reference
@@ -46,6 +47,13 @@ An interactive web application for learning the CAGED guitar system with a modul
 - **S**: Toggle pentatonic scale overlay
 - **N**: Toggle all notes display
 
+### Modes System
+- Click "Modes" to access the guitar modes learning system
+- Choose from all 7 traditional modes with color-coded buttons
+- Each mode shows its root note and interval pattern
+- View mode patterns on the fretboard with note names
+- Toggle note names display on/off as needed
+
 ### Quiz Mode
 - Click "Quiz Mode" to start a chord identification quiz
 - View a chord pattern on the fretboard and identify which root chord it represents
@@ -78,6 +86,10 @@ src/
 │   │   ├── hooks/       # CAGED-specific React hooks
 │   │   ├── types/       # CAGED system types
 │   │   └── utils/       # CAGED-specific utilities
+│   ├── modes/           # Guitar modes system module
+│   │   ├── components/  # Simple modes visualizer component
+│   │   ├── constants.ts # Mode definitions and tuning
+│   │   └── utils.ts     # Music theory utilities
 │   └── quiz/            # Quiz learning system module
 │       ├── components/  # Quiz-specific components
 │       ├── constants/   # Quiz system constants
@@ -91,11 +103,11 @@ src/
 ```
 
 ### Key Architecture Features
-- **Modular Systems**: Each guitar learning system (CAGED, Quiz) is completely isolated
+- **Modular Systems**: Each guitar learning system (CAGED, Modes, Quiz) is completely isolated
 - **Shared Resources**: Common components and utilities are centralized for reuse
 - **TypeScript Path Aliases**: Clean imports using `@/shared` and `@/systems`
 - **Barrel Exports**: Each module provides clean export interfaces
-- **Code Splitting**: Quiz system is lazy-loaded for optimal performance
+- **Code Splitting**: Quiz and Modes systems are lazy-loaded for optimal performance
 - **Tree Shaking**: Optimized bundle sizes through proper module structure
 
 ### Tech Stack
@@ -113,8 +125,9 @@ src/
 
 ### Bundle Optimization
 The modular architecture enables excellent bundle optimization:
-- **Main bundle**: ~213kB (66kB gzipped) - Core app + CAGED system
+- **Main bundle**: ~214kB (66kB gzipped) - Core app + CAGED system
 - **Quiz chunk**: ~18kB (5.5kB gzipped) - Lazy-loaded quiz system
+- **Modes chunk**: ~3.5kB (1.5kB gzipped) - Lazy-loaded modes system
 - **CSS bundle**: ~33kB (6.5kB gzipped) - Optimized styles
 - **Total**: Fast loading with effective code splitting
 
@@ -127,4 +140,4 @@ The modular architecture makes it easy to add new guitar learning systems:
 3. Add system exports to a barrel export file
 4. Import and integrate in the main app
 
-This design supports future expansion to other guitar learning methods like scale patterns, chord progressions, or music theory exercises.
+This design supports future expansion to other guitar learning methods like scale patterns, chord progressions, or music theory exercises. The completed modes system demonstrates how simple and effective new learning modules can be within this architecture.
