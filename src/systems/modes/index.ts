@@ -1,29 +1,9 @@
-// Types
-export type {
-  ModeType,
-  ChromaticNote,
-  ModeData,
-  ModeState,
-  ModePosition,
-  ModePattern,
-  ModesSystemState
-} from './types';
+// Simple Guitar Modes System
+// A lightweight system for learning and visualizing guitar modes
 
-// Constants
-export {
-  MODE_INTERVALS,
-  MODE_COLORS,
-  MODE_ROOT_NOTES,
-  MODE_DATA,
-  ALL_MODES,
-  DEFAULT_MODE_STATE
-} from './constants';
+// Main component
+export { SimpleModesVisualizer } from './components';
 
-// Components
-export * from './components';
-
-// Hooks
-export * from './hooks';
-
-// Utilities
-export * from './utils';
+// Constants and utilities (for potential future extension)
+export { MODES } from './constants';
+export { getNoteAtFret, isNoteInMode, isRootNote } from './utils';
