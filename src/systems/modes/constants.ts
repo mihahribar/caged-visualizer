@@ -1,13 +1,13 @@
 // Guitar Modes System Constants
 
 export const MODES = {
-  'C Ionian (Major)': { root: 'C', intervals: [0, 2, 4, 5, 7, 9, 11], color: '#3B82F6' },
-  'D Dorian': { root: 'D', intervals: [0, 2, 3, 5, 7, 9, 10], color: '#10B981' },
-  'E Phrygian': { root: 'E', intervals: [0, 1, 3, 5, 7, 8, 10], color: '#F59E0B' },
-  'F Lydian': { root: 'F', intervals: [0, 2, 4, 6, 7, 9, 11], color: '#EF4444' },
-  'G Mixolydian': { root: 'G', intervals: [0, 2, 4, 5, 7, 9, 10], color: '#8B5CF6' },
-  'A Aeolian (Minor)': { root: 'A', intervals: [0, 2, 3, 5, 7, 8, 10], color: '#EC4899' },
-  'B Locrian': { root: 'B', intervals: [0, 1, 3, 5, 6, 8, 10], color: '#6B7280' }
+  'Ionian (Major)': { root: 'C', intervals: [0, 2, 4, 5, 7, 9, 11], color: '#FF6B6B' }, // Matches CAGED C Shape
+  'Dorian': { root: 'D', intervals: [0, 2, 3, 5, 7, 9, 10], color: '#FECA57' }, // Matches CAGED D Shape
+  'Phrygian': { root: 'E', intervals: [0, 1, 3, 5, 7, 8, 10], color: '#96CEB4' }, // Matches CAGED E Shape
+  'Lydian': { root: 'F', intervals: [0, 2, 4, 6, 7, 9, 11], color: '#9B59B6' }, // New color - purple
+  'Mixolydian': { root: 'G', intervals: [0, 2, 4, 5, 7, 9, 10], color: '#45B7D1' }, // Matches CAGED G Shape
+  'Aeolian (Minor)': { root: 'A', intervals: [0, 2, 3, 5, 7, 8, 10], color: '#4ECDC4' }, // Matches CAGED A Shape
+  'Locrian': { root: 'B', intervals: [0, 1, 3, 5, 6, 8, 10], color: '#E67E22' } // New color - orange
 } as const;
 
 // Standard tuning notes (from top to bottom as displayed on fretboard)

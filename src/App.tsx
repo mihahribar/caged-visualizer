@@ -7,7 +7,7 @@ import { useNavigation } from "./hooks/useNavigation";
 
 // Lazy load Quiz and Modes components for better initial bundle size
 const QuizPage = lazy(() => import("@/systems/quiz/components/QuizPage"));
-const ModesVisualizer = lazy(() => import("@/systems/modes/components/SimpleModesVisualizer"));
+const ModesVisualizer = lazy(() => import("@/systems/modes/components/ModesVisualizer"));
 
 function AppContent() {
   const { currentPage } = useNavigation();
@@ -21,7 +21,7 @@ function AppContent() {
       
       {/* Main Content */}
       <main>
-        {currentPage === 'visualizer' && <CAGEDVisualizer />}
+        {currentPage === 'caged' && <CAGEDVisualizer />}
         {currentPage === 'quiz' && (
           <Suspense fallback={<LoadingFallback message="Loading quiz..." size="large" />}>
             <QuizPage />

@@ -5,8 +5,8 @@ import { MODES, type ModeKey } from '../constants';
 import { getNoteAtFret, isNoteInMode, isRootNote } from '../utils';
 import ToggleSwitch from './ToggleSwitch';
 
-export default function SimpleModesVisualizer() {
-  const [selectedMode, setSelectedMode] = useState<ModeKey>('C Ionian (Major)');
+export default function ModesVisualizer() {
+  const [selectedMode, setSelectedMode] = useState<ModeKey>('Ionian (Major)');
   const [showNoteNames, setShowNoteNames] = useState(true);
 
   const currentMode = MODES[selectedMode];
@@ -16,7 +16,7 @@ export default function SimpleModesVisualizer() {
       {/* Mode Selector */}
       <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-          Select Mode:
+          Select Mode
         </label>
         <div className="grid grid-cols-3 gap-2">
           {Object.entries(MODES).map(([mode, data]) => (
@@ -24,7 +24,7 @@ export default function SimpleModesVisualizer() {
               key={mode}
               onClick={() => setSelectedMode(mode as ModeKey)}
               className={`
-                p-2 rounded font-medium text-left transition-all duration-200
+                p-2 rounded font-medium text-left transition-all duration-200 cursor-pointer
                 ${selectedMode === mode
                   ? 'ring-2 ring-offset-1 ring-offset-gray-50 dark:ring-offset-gray-800 shadow-lg'
                   : 'hover:shadow-md'
@@ -36,9 +36,9 @@ export default function SimpleModesVisualizer() {
               }}
             >
               <div className="flex flex-col gap-0.5">
-                <div className="text-sm font-bold">{mode}</div>
+                <div className="text-base"><span className="font-bold">{data.root}</span> {mode}</div>
                 <div className="text-xs opacity-90">
-                  Root: {data.root} • {data.intervals.join('-')}
+                  {data.intervals.join('-')}
                 </div>
               </div>
             </button>

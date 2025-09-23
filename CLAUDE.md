@@ -63,7 +63,7 @@ src/
 │   │   └── utils/             # CAGED-specific utilities
 │   ├── modes/                 # Guitar modes system module
 │   │   ├── components/        # Modes-specific components
-│   │   │   ├── SimpleModesVisualizer.tsx # Main modes visualizer
+│   │   │   ├── ModesVisualizer.tsx # Main modes visualizer
 │   │   │   └── ToggleSwitch.tsx          # Reusable toggle component
 │   │   ├── constants.ts       # Mode definitions and tuning data
 │   │   └── utils.ts           # Music theory utilities for modes

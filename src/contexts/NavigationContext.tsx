@@ -4,7 +4,7 @@ import type { AppPage } from '../types/navigation';
 import { NavigationContext } from './NavigationContextCore';
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
-  const [currentPage, setCurrentPage] = useState<AppPage>('visualizer');
+  const [currentPage, setCurrentPage] = useState<AppPage>('caged');
 
   const navigateTo = (page: AppPage) => {
     setCurrentPage(page);
