@@ -6,7 +6,8 @@ export default function AppNavigation() {
   const { currentPage, navigateTo } = useNavigation();
 
   const navItems: { page: AppPage; label: string; description: string }[] = [
-    { page: 'visualizer', label: 'Visualizer', description: 'Interactive CAGED system explorer' },
+    { page: 'caged', label: 'CAGED', description: 'Interactive CAGED system explorer' },
+    { page: 'modes', label: 'Modes', description: 'Learn guitar modes and scale patterns' },
     { page: 'quiz', label: 'Quiz', description: 'Test your chord identification skills' }
   ];
 
@@ -17,7 +18,7 @@ export default function AppNavigation() {
           {/* Logo/Title */}
           <div className="flex items-center">
             <h1 className="text-xl font-light text-gray-800 dark:text-gray-100">
-              CAGED Guitar System
+              Guitar Learning Systems 🎸
             </h1>
           </div>
 

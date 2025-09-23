@@ -1,7 +1,7 @@
 # CAGED Visualizer Project - Claude Development Guide
 
 ## Project Overview
-Interactive React web application for learning the CAGED guitar system - a guitar learning method that teaches 5 chord shapes that can be moved up and down the neck. The app includes both an interactive visualizer and a quiz mode for chord identification practice. **Now supports both major and minor chord qualities** with complete CAGED implementation for all chord types.
+Interactive React web application for learning the CAGED guitar system - a guitar learning method that teaches 5 chord shapes that can be moved up and down the neck. The app includes an interactive visualizer, quiz mode for chord identification practice, and a guitar modes learning system. **Now supports both major and minor chord qualities** with complete CAGED implementation for all chord types and all 7 traditional guitar modes.
 
 **Live Site**: [caged.hribar.org](https://caged.hribar.org)
 
@@ -61,6 +61,12 @@ src/
 │   │   ├── types/             # CAGED-specific types
 │   │   │   └── index.ts       # CAGED interfaces and types
 │   │   └── utils/             # CAGED-specific utilities
+│   ├── modes/                 # Guitar modes system module
+│   │   ├── components/        # Modes-specific components
+│   │   │   ├── ModesVisualizer.tsx # Main modes visualizer
+│   │   │   └── ToggleSwitch.tsx          # Reusable toggle component
+│   │   ├── constants.ts       # Mode definitions and tuning data
+│   │   └── utils.ts           # Music theory utilities for modes
 │   └── quiz/                  # Quiz learning system module
 │       ├── components/        # Quiz-specific components
 │       │   ├── QuizPage.tsx           # Quiz mode entry point

@@ -128,7 +128,7 @@ export type ThemePreference = 'light' | 'dark';
 /**
  * Navigation page type
  */
-export type NavigationPage = 'visualizer' | 'quiz';
+export type NavigationPage = 'caged' | 'quiz';
 
 /**
  * App-wide navigation state
